@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Model;
 
-/**
- *
- * @author Matthew Manning
- */
+
 public class Appointment {
+    
+    private int appointmentId, customerId, userId;
+    private Customer customer;
+    private String title, description, location, contact, type;
     
 }

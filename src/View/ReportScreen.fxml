@@ -1,11 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReportScreenController">
-    
+
+<AnchorPane id="AnchorPane" prefHeight="501.0" prefWidth="786.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controller.ReportScreenController">
+   <children>
+      <VBox alignment="CENTER" layoutX="-14.0" prefHeight="504.0" prefWidth="800.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="57.0" prefWidth="790.0">
+               <children>
+                  <Label text="Reports">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="800.0" spacing="40.0">
+               <children>
+                  <RadioButton fx:id="appointmentByMonthRB" mnemonicParsing="false" onAction="#onActionAppointmentTypesByMonth" text="Appointment Types by Month" />
+                  <RadioButton fx:id="consultantScheduleRB" mnemonicParsing="false" onAction="#onActionConsultantSchedule" text="Consultant Schedule" />
+                  <RadioButton fx:id="appointmentByCityRB" mnemonicParsing="false" onAction="#onActionAppointmentByCity" text="Appointment by City" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <VBox prefHeight="300.0" prefWidth="0.0">
+               <children>
+                  <TextArea prefHeight="275.0" prefWidth="760.0" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="780.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onActionToMainScreen" text="Back" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
 </AnchorPane>

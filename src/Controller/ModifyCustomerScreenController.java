@@ -1,27 +1,64 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
-/**
- * FXML Controller class
- *
- * @author Matthew Manning
- */
+
 public class ModifyCustomerScreenController implements Initializable {
+    
+    @FXML
+    private TextField customerNameTxt;
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML
+    private TextField customerIdTxt;
+
+    @FXML
+    private TextField customerAddressTxt;
+
+    @FXML
+    private TextField customerAddress2Txt;
+
+    @FXML
+    private TextField customerCityTxt;
+
+    @FXML
+    private TextField customerPostalCodeTxt;
+
+    @FXML
+    private TextField customerPhoneTxt;
+
+    @FXML
+    private TableView<?> customerTableView;
+
+    @FXML
+    void OnActionSaveCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void OnActionToMainScreen(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionActive(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionInactive(ActionEvent event) {
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }    
     
 }
