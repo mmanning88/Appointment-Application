@@ -1,6 +1,8 @@
 
 package c195pa;
 
+import Model.Appointment;
+import Model.Customer;
 import Utilities.DBConnection;
 import Utilities.DBQuery;
 import com.mysql.jdbc.Connection;
@@ -32,23 +34,23 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         
-        Connection conn = DBConnection.startConnection();
-        String selectStatement = "SELECT * FROM appointment";
-
-        DBQuery.setPreparedStatement(conn, selectStatement);
-
-        
-        PreparedStatement ps = DBQuery.getPreparedStatement();
-        ps.execute();
-        
-        ResultSet rs = ps.getResultSet();
-        System.out.println(rs.next());
-        
-        while (rs.next()) {
-            int appointmentId = rs.getInt("appointmentId");
-            int customerId = rs.getInt("customerId");
-            int userId = rs.getInt("userId");
-        }
+//        Connection conn = DBConnection.startConnection();
+//        String selectStatement = "SELECT * FROM appointment";
+//
+//        DBQuery.setPreparedStatement(conn, selectStatement);
+//
+//        
+//        PreparedStatement ps = DBQuery.getPreparedStatement();
+//        ps.execute();
+//        
+//        ResultSet rs = ps.getResultSet();
+//        System.out.println(rs.next());
+//        
+//        while (rs.next()) {
+//            int appointmentId = rs.getInt("appointmentId");
+//            int customerId = rs.getInt("customerId");
+//            int userId = rs.getInt("userId");
+//        }
 //        while (rs.next()) {
 //            int countryId = rs.getInt("countryId");
 //            String country = rs.getString("country");
@@ -65,7 +67,17 @@ public class Main extends Application {
 //        }
         
         launch(args);
-        DBConnection.closeConnection();
+        Customer testCustomer = new Customer(5, 0, "TestCustomer", 6, "80134", "555-555-5555", "Test address", "", 99, "TestCity", 99, "TestCountry");
+        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
+                .setContact("Test Contact")
+                .setLocation("Test Location").build();
+        
+        System.out.println(testAppointment.getDescription());
+        
+//        
+//        DBConnection.closeConnection();
+//        
+        
 
     }
     

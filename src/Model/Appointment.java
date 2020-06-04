@@ -1,111 +1,113 @@
 
 package Model;
 
+// Example constructor
+//        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
+//                .setContact("Test Contact")
+//                .setDescription("Test Description")
+//                .setLocation("Test Location").build();
+
 
 public class Appointment {
+
+    private final int appointmentId;
+    private final int customerId;
+    private final int userId;
+    private final Customer customer;
+    private final String title;
+    private final String type;
+    private final String description; //Optional
+    private final String location; //Optional
+    private final String contact; //Optional
     
-    private int appointmentId, customerId, userId;
-    private Customer customer;
-    private String title, description, location, contact, type;
-    
-// Partial constructor sets non-required fields to empty string
-    public Appointment(int appointmentId, int customerId, int userId, Customer customer, String title, String type) {
+    // Builder pattern handles optional parameters
+    public static class AppointmentBuilder {
+        
+        private final int appointmentId, customerId, userId;
+        private final Customer customer;
+        private final String title;
+        private final String type;
+        private String description, location, contact; //Optional
+        
+        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, String title, String type) {
+            
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.userId = userId;
         this.customer = customer;
         this.title = title;
         this.type = type;
-        this.description = "";
-        this.location = "";
-        this.contact = "";
-    }   
-// Full constructor
-    public Appointment(int appointmentId, int customerId, int userId, Customer customer, String title, String description, String location, String contact, String type) {
-        this.appointmentId = appointmentId;
-        this.customerId = customerId;
-        this.userId = userId;
-        this.customer = customer;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.contact = contact;
-        this.type = type;
+        
+        }
+        
+        public AppointmentBuilder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+        
+        public AppointmentBuilder setLocation(String location) {
+            this.location = location;
+            return this;
+        }
+        
+        public AppointmentBuilder setContact(String contact) {
+            this.contact = contact;
+            return this;
+        }
+        
+        public Appointment build() {
+            // must be called after optional setters
+            return new Appointment(this);
+        }
+        
+    }
+
+    private Appointment(AppointmentBuilder builder) {
+        this.appointmentId = builder.appointmentId;
+        this.customerId = builder.customerId;
+        this.userId = builder.userId;
+        this.customer = builder.customer;
+        this.title = builder.title;
+        this.type = builder.type;
+        this.description = builder.description;
+        this.location = builder.location;
+        this.contact = builder.contact;
     }
 
     public int getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(int appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-
     public int getCustomerId() {
         return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public Customer getCustomer() {
         return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getType() {
+        return type;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getLocation() {
         return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getContact() {
         return contact;
     }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    
-    
     
 }
