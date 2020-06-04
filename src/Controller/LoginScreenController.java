@@ -7,21 +7,32 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 
 public class LoginScreenController implements Initializable {
     
     @FXML
     private Label loginInstructionLbl;
+    
+    @FXML
+    private TextField usernameTxt;
 
     @FXML
-    void onActionExit(ActionEvent event) {
+    private TextField passwordTxt;
 
+    @FXML
+    void onActionExit(ActionEvent event) {   
+        System.exit(0);
     }
 
     @FXML
     void onActionLogin(ActionEvent event) {
 
+    }
+    
+    private void setLocale() {
+        
     }
 
     @Override
