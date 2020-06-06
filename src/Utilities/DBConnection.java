@@ -10,10 +10,6 @@ import java.util.logging.Logger;
 
 public class DBConnection {
     
-    // JDBC URL parts
-    private static final String protocol = "jdbc";
-    private static final String vendorName = ":mysql:";
-    private static final String ipAddress = "//3.227.166.251/U0617s";
 
     // JDBC URL
     private static final String jdbcURL = "jdbc:mysql://3.227.166.251/U0617s";

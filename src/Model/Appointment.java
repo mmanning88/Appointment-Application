@@ -2,6 +2,9 @@
 package Model;
 
 // Example constructor
+
+import java.time.LocalDateTime;
+
 //        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
 //                .setContact("Test Contact")
 //                .setDescription("Test Description")
@@ -16,6 +19,10 @@ public class Appointment {
     private final Customer customer;
     private final String title;
     private final String type;
+    private final LocalDateTime createDate;
+    private final String createdBy;
+    private String lastUpdateBy;
+    private LocalDateTime lastUpdate;
     private final String description; //Optional
     private final String location; //Optional
     private final String contact; //Optional
@@ -27,9 +34,14 @@ public class Appointment {
         private final Customer customer;
         private final String title;
         private final String type;
+        private final LocalDateTime createDate;
+        private final String createdBy;
+        private String lastUpdateBy;
+        private LocalDateTime lastUpdate;
         private String description, location, contact; //Optional
         
-        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, String title, String type) {
+        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, String title, 
+                                    String type, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy) {
             
         this.appointmentId = appointmentId;
         this.customerId = customerId;
@@ -37,6 +49,10 @@ public class Appointment {
         this.customer = customer;
         this.title = title;
         this.type = type;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdateBy = lastUpdateBy;
         
         }
         
@@ -69,6 +85,10 @@ public class Appointment {
         this.customer = builder.customer;
         this.title = builder.title;
         this.type = builder.type;
+        this.createDate = builder.createDate;
+        this.createdBy = builder.createdBy;
+        this.lastUpdate = builder.lastUpdate;
+        this.lastUpdateBy = builder.lastUpdateBy;
         this.description = builder.description;
         this.location = builder.location;
         this.contact = builder.contact;
@@ -109,5 +129,25 @@ public class Appointment {
     public String getContact() {
         return contact;
     }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+
+    
+    
     
 }

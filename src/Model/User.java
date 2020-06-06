@@ -1,7 +1,7 @@
 
 package Model;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 
 public class User {
@@ -9,6 +9,83 @@ public class User {
     private int userId;
     private String userName, password, createdBy, lastUpdateBy;
     private boolean active;
-    private Calendar createDate, lastUpdate;
+    private LocalDateTime createDate, lastUpdate;
+
+    public User(int userId, String userName, String password, String createdBy, String lastUpdateBy, boolean active, LocalDateTime createDate, LocalDateTime lastUpdate) {
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.createdBy = createdBy;
+        this.lastUpdateBy = lastUpdateBy;
+        this.active = active;
+        this.createDate = createDate;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+    
+    
     
 }

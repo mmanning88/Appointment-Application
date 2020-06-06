@@ -1,17 +1,32 @@
 
 package Controller;
 
+import Model.Appointment;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 
 public class MainScreenController implements Initializable {
     
-     @FXML
-    private TableView<?> mainScreenCalanderView;
+
+
+    @FXML
+    private TableView<Appointment> calenderWeeklyView;
+
+    @FXML
+    private TextArea descriptionTxtAreaWeekly;
+
+    @FXML
+    private TableView<Appointment> calenderMonthlyView;
+
+    @FXML
+    private TextArea descriptionTxtAreaMonthly;
+
+    private Appointment selectedAppointment;
 
     @FXML
     void OnActionDeleteAppointment(ActionEvent event) {
