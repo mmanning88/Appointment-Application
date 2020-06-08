@@ -1,10 +1,15 @@
 
 package c195pa;
 
+import DAO.AppointmentDAO;
+import DAO.CustomerDAO;
+import DAO.UserDAO;
 import Model.Address;
 import Model.Appointment;
 import Model.AppointmentList;
 import Model.Customer;
+import Model.CustomerList;
+import Model.User;
 import Utilities.DBConnection;
 import Utilities.DBManager;
 import Utilities.DBQuery;
@@ -17,13 +22,16 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-
+/*
+@author Matthew Manning
+*/
 public class Main extends Application {
     
     @Override
@@ -37,16 +45,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
-        //launch(args);
-        DBManager.fillWeeklyAppointments();
-        for (Appointment a : AppointmentList.weeklyAppointments) {
-            System.out.println(a.getAppointmentId());
-        }
+        launch(args);
         System.exit(0);
     }
     
-    public void initializeData() {
-        
-    }
     
 }

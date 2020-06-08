@@ -11,7 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-
+/*
+@author Matthew Manning
+*/
 public class AddAppointmentScreenController implements Initializable {
 
     @FXML

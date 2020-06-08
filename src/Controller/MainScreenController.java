@@ -9,7 +9,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-
+/*
+@author Matthew Manning
+*/
 public class MainScreenController implements Initializable {
     
 

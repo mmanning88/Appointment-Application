@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
-
+/*
+@author Matthew Manning
+*/
 public class ReportScreenController implements Initializable {
     
     

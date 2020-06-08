@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-
+/*
+@author Matthew Manning
+*/
 public class AddCustomerScreenController implements Initializable {
     
     @FXML

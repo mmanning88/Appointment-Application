@@ -10,13 +10,16 @@ import java.time.LocalDateTime;
 //                .setDescription("Test Description")
 //                .setLocation("Test Location").build();
 
-
+/*
+@author Matthew Manning
+*/
 public class Appointment {
 
     private final int appointmentId;
     private final int customerId;
     private final int userId;
     private final Customer customer;
+    private final User user;
     private final String title;
     private final String type;
     private final LocalDateTime createDate;
@@ -32,6 +35,7 @@ public class Appointment {
         
         private final int appointmentId, customerId, userId;
         private final Customer customer;
+        private final User user;
         private final String title;
         private final String type;
         private final LocalDateTime createDate;
@@ -40,13 +44,14 @@ public class Appointment {
         private LocalDateTime lastUpdate;
         private String description, location, contact; //Optional
         
-        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, String title, 
+        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, User user, String title, 
                                     String type, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy) {
             
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.userId = userId;
         this.customer = customer;
+        this.user = user;
         this.title = title;
         this.type = type;
         this.createDate = createDate;
@@ -83,6 +88,7 @@ public class Appointment {
         this.customerId = builder.customerId;
         this.userId = builder.userId;
         this.customer = builder.customer;
+        this.user = builder.user;
         this.title = builder.title;
         this.type = builder.type;
         this.createDate = builder.createDate;
@@ -145,6 +151,19 @@ public class Appointment {
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+    
 
 
     

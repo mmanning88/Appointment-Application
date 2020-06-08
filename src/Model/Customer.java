@@ -1,11 +1,14 @@
 
 package Model;
 
-
+/*
+@author Matthew Manning
+*/
 public class Customer {
     
     // Customer property members
-    private int customerId, active;
+    private int customerId;
+    private Boolean active;
     private String customerName;
     
     // Address property members
@@ -13,7 +16,7 @@ public class Customer {
 
     public Customer(int customerId, int active, String customerName, Address address) {
         this.customerId = customerId;
-        this.active = active;
+        this.active = active == 1;
         this.customerName = customerName;
         this.address = address;
     }
@@ -26,11 +29,11 @@ public class Customer {
         this.customerId = customerId;
     }
 
-    public int getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(int active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

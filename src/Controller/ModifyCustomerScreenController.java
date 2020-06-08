@@ -9,7 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-
+/*
+@author Matthew Manning
+*/
 public class ModifyCustomerScreenController implements Initializable {
     
     @FXML

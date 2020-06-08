@@ -15,7 +15,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="125.0" maxWidth="500.0" minHeight="100.0" minWidth="400.0" prefHeight="120.0" prefWidth="450.0" spacing="20.0">
                <children>
-                  <Label text="Welcome to AllAppointments">
+                  <Label fx:id="titleLbl" text="Welcome to AllAppointments">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -30,8 +30,8 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="101.0" prefWidth="334.0" spacing="10.0">
                      <children>
-                        <TextField fx:id="usernameTxt" maxWidth="200.0" text="Username" />
-                        <TextField fx:id="passwordTxt" maxHeight="25.0" maxWidth="200.0" minHeight="25.0" minWidth="50.0" prefHeight="25.0" prefWidth="100.0" text="Password" />
+                        <TextField fx:id="usernameTxt" maxWidth="200.0" promptText="Username" />
+                        <TextField fx:id="passwordTxt" maxHeight="25.0" maxWidth="200.0" minHeight="25.0" minWidth="50.0" prefHeight="25.0" prefWidth="100.0" promptText="Password" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

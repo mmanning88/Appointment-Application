@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- *
- * @author Matthew Manning
- */
+/*
+@author Matthew Manning
+*/
 public class AppointmentList {
     
     public static ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
@@ -23,6 +18,32 @@ public class AppointmentList {
 
     public static ObservableList<Appointment> getMonthlyAppointments() {
         return monthlyAppointments;
+    }
+    
+    public static void addToAppointmentList(Appointment appointment) {       
+        weeklyAppointments.add(appointment);
+        monthlyAppointments.add(appointment);     
+    }
+    
+    public static void deleteFromAppointmentList(Appointment appointment) {
+        weeklyAppointments.remove(appointment);
+        monthlyAppointments.remove(appointment);
+    }
+    
+    public static void updateAppointmentList(int index, Appointment appointment) {
+        weeklyAppointments.set(index, appointment);
+        monthlyAppointments.set(index, appointment);
+    }
+    
+    public static Appointment searchAppointmentList(int appointmentId) {
+
+        for (Appointment appointment : getWeeklyAppointments()) {
+            if (appointment.getAppointmentId() == appointmentId) {
+                return appointment;
+            }
+        }
+        return null;
+    
     }
     
     

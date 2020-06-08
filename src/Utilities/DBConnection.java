@@ -16,7 +16,7 @@ public class DBConnection {
     
     // Driver and Connection interface reference
     private static final String MYSQLJDBCDriver = "com.mysql.jdbc.Driver";
-    private static Connection conn = null;
+    private static Connection conn;
     
     private static final String username = "U0617s"; // Username
     private static final String password = "53688668655"; // Password
@@ -27,14 +27,11 @@ public class DBConnection {
             conn = (Connection) DriverManager.getConnection(jdbcURL, username, password);
             System.out.println("Connection successful");
             
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             //Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
         }
-        catch (SQLException ex) {
-            //Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
-        }
+        //Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         
         return conn;
     }

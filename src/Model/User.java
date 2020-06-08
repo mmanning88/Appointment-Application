@@ -3,7 +3,9 @@ package Model;
 
 import java.time.LocalDateTime;
 
-
+/*
+@author Matthew Manning
+*/
 public class User {
     
     private int userId;
