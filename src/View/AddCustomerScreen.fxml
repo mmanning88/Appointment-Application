@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="450.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controller.AddCustomerScreenController">
+<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddCustomerScreenController">
    <children>
       <VBox alignment="TOP_CENTER" layoutY="14.0" prefHeight="455.0" prefWidth="450.0" spacing="5.0">
          <children>
@@ -40,8 +40,11 @@
                   <Label text="Active" GridPane.rowIndex="2" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <RadioButton mnemonicParsing="false" onAction="#onActionActive" text="Yes" />
-                        <RadioButton mnemonicParsing="false" onAction="#onActionInactive" text="No" />
+                        <RadioButton mnemonicParsing="false" onAction="#onActionActive" text="Yes">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="isActiveTG" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onActionInactive" text="No" toggleGroup="$isActiveTG" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

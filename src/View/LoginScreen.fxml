@@ -42,8 +42,8 @@
                   </VBox>
                   <HBox alignment="TOP_CENTER" maxHeight="50.0" maxWidth="400.0" minHeight="40.0" minWidth="250.0" prefHeight="45.0" prefWidth="300.0" spacing="50.0">
                      <children>
-                        <Button maxWidth="50.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionLogin" prefWidth="50.0" text="Login" />
-                        <Button maxWidth="50.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionExit" prefWidth="50.0" text="Exit" />
+                        <Button fx:id="loginBtn" maxWidth="50.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionLogin" prefWidth="50.0" text="Login" />
+                        <Button fx:id="exitBtn" maxWidth="50.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionExit" prefWidth="50.0" text="Exit" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

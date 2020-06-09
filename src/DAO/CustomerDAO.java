@@ -37,7 +37,47 @@ public class CustomerDAO {
             Customer customer = new Customer(rs.getInt("customerId"), rs.getInt("active"), rs.getString("customerName"), address);
             DBConnection.closeConnection();
             return customer;
-    }
+        }
+        
+        public static void deleteDBCustomer(int id) throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String selectCustomer = "DELETE FROM customer WHERE customerId = ?";
+            DBQuery.setPreparedStatement(conn, selectCustomer);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setInt(1, id);
+            ps.execute();
+            DBConnection.closeConnection();
+        }
+        
+        public static void updateDBCustomer(Customer customer, int id) throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String updateCustomer = "UPDATE customer SET customerName = ?, active = ? WHERE customerID = ?";
+            DBQuery.setPreparedStatement(conn, updateCustomer);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            
+            // 1 = active/true 0 = inactive/false
+            int active = customer.getActive() ? 1 : 0;
+            ps.setString(1, customer.getCustomerName());
+            ps.setInt(2, active);
+            ps.setInt(3, id);
+            ps.execute();
+            DBConnection.closeConnection();
+        }
+        
+        public static void updateDBCustomerAddress(Customer customer) {
+
+            Connection conn = DBConnection.startConnection();
+            Address address = customer.getAddress();
+            String updateAddress = "UPDATE address INNER JOIN city USING (cityId) INNER JOIN country USING (countryID) "
+                    + "SET address.address = 'address', address.address2 = 'adress2' ";
+            
+            
+            DBConnection.closeConnection();
+        }
+        
+        public static void addDBCustomer(Customer customer) {
+            
+        }
         
         public static ObservableList getAllCustomers() throws SQLException {
             ObservableList allCustomers = FXCollections.observableArrayList();

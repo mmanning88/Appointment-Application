@@ -10,16 +10,14 @@ public class User {
     
     private int userId;
     private String userName, password, createdBy, lastUpdateBy;
-    private boolean active;
     private LocalDateTime createDate, lastUpdate;
 
-    public User(int userId, String userName, String password, String createdBy, String lastUpdateBy, boolean active, LocalDateTime createDate, LocalDateTime lastUpdate) {
+    public User(int userId, String userName, String password, String createdBy, String lastUpdateBy, LocalDateTime createDate, LocalDateTime lastUpdate) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.createdBy = createdBy;
         this.lastUpdateBy = lastUpdateBy;
-        this.active = active;
         this.createDate = createDate;
         this.lastUpdate = lastUpdate;
     }
@@ -62,14 +60,6 @@ public class User {
 
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public LocalDateTime getCreateDate() {

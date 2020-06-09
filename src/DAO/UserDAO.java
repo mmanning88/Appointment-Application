@@ -27,23 +27,20 @@ public class UserDAO {
                 ps.execute(); // Execute PreparedStatement
                 ResultSet rs = ps.getResultSet();
                 rs.next();    
-                Boolean active = (rs.getInt("active") == 1);
                 LocalDate createDate = rs.getDate("createDate").toLocalDate();
                 LocalTime createTime = rs.getTime("createDate").toLocalTime();
                 LocalDateTime createldt = LocalDateTime.of(createDate, createTime);
                 LocalDate updateDate = rs.getDate("lastUpdate").toLocalDate();
                 LocalTime updateTime = rs.getTime("lastUpdate").toLocalTime();
                 LocalDateTime updateldt = LocalDateTime.of(updateDate, updateTime);
+                User user = new User(rs.getInt("userId"), rs.getString("userName"), rs.getString("password"), rs.getString("createdBy"), rs.getString("lastUpdateBy"), createldt, updateldt);
                 DBConnection.closeConnection();
-                User user = new User(rs.getInt("userId"), rs.getString("userName"), rs.getString("password"), rs.getString("createdBy"), rs.getString("lastUpdateBy"), active, createldt, updateldt);
                 return user;
-                // Create user object with ResultSet
-            } catch(SQLException e) {
+            } catch (SQLException e){
                 System.out.println("User not found in DB");
             }
             DBConnection.closeConnection();
-            return null;
-
+            return null;    
     }
         
         public static User getDBUser(String userName) throws SQLException {
@@ -56,14 +53,13 @@ public class UserDAO {
                 ps.execute(); // Execute PreparedStatement
                 ResultSet rs = ps.getResultSet();
                 rs.next();    
-                Boolean active = (rs.getInt("active") == 1);
                 LocalDate createDate = rs.getDate("createDate").toLocalDate();
                 LocalTime createTime = rs.getTime("createDate").toLocalTime();
                 LocalDateTime createldt = LocalDateTime.of(createDate, createTime);
                 LocalDate updateDate = rs.getDate("lastUpdate").toLocalDate();
                 LocalTime updateTime = rs.getTime("lastUpdate").toLocalTime();
                 LocalDateTime updateldt = LocalDateTime.of(updateDate, updateTime);
-                User user = new User(rs.getInt("userId"), rs.getString("userName"), rs.getString("password"), rs.getString("createdBy"), rs.getString("lastUpdateBy"), active, createldt, updateldt);
+                User user = new User(rs.getInt("userId"), rs.getString("userName"), rs.getString("password"), rs.getString("createdBy"), rs.getString("lastUpdateBy"), createldt, updateldt);
                 DBConnection.closeConnection();
                 return user;
             } catch (SQLException e){
