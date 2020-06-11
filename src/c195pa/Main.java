@@ -1,26 +1,17 @@
 
 package c195pa;
 
-import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
 import DAO.UserDAO;
 import Model.Address;
-import Model.Appointment;
-import Model.AppointmentList;
 import Model.Customer;
 import Model.CustomerList;
-import Model.User;
-import Utilities.DBConnection;
-import Utilities.DBManager;
-import Utilities.DBQuery;
-import com.mysql.jdbc.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import Model.UserList;
+import Utilities.DateTimeFormat;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +37,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         launch(args);
-
 
         System.exit(0);
     }

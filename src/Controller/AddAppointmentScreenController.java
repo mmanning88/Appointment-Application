@@ -12,22 +12,49 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/*
-@author Matthew Manning
-*/
+/**
+ * 
+ *
+ * @author Matthew Manning
+ */
 public class AddAppointmentScreenController implements Initializable {
-       
+    
     Stage stage;
     Parent scene;
 
     @FXML
     private TableView<?> customerTableView;
 
+    @FXML
+    private TableColumn<?, ?> customerIdCol;
+
+    @FXML
+    private TableColumn<?, ?> customerNameCol;
+
+    @FXML
+    private TableColumn<?, ?> customerAddressCol;
+
+    @FXML
+    private TableColumn<?, ?> customerAddress2Col;
+
+    @FXML
+    private TableColumn<?, ?> customerCityCol;
+
+    @FXML
+    private TableColumn<?, ?> customerPostalCodeCol;
+
+    @FXML
+    private TableColumn<?, ?> customerCountryCol;
+
+    @FXML
+    private TableColumn<?, ?> customerPhoneCol;
+    
     @FXML
     private TextField customerIdTxt;
 
@@ -54,6 +81,12 @@ public class AddAppointmentScreenController implements Initializable {
 
     @FXML
     private DatePicker endDatePicker;
+    
+    @FXML
+    private TextField endTimeTxt, startTimetxt;
+
+
+
 
     @FXML
     void onActionSaveAppointment(ActionEvent event) {
@@ -67,9 +100,10 @@ public class AddAppointmentScreenController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        // TODO
     }    
     
 }

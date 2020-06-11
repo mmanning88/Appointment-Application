@@ -79,7 +79,7 @@
                   <Label text="Postal Code" GridPane.rowIndex="3" />
                   <Label text="Country" GridPane.rowIndex="4" />
                   <Label text="Phone" GridPane.rowIndex="5" />
-                  <ComboBox maxWidth="200.0" minWidth="120.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="countryCombo" maxWidth="200.0" minWidth="120.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="customerAddressTxt" maxWidth="200.0" GridPane.columnIndex="1" />
                   <TextField fx:id="customerAddress2Txt" maxWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="customerCityTxt" maxWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

@@ -16,8 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1100.0" minHeight="500.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controller.ModifyCustomerScreenController">
+<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1100.0" minHeight="500.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyCustomerScreenController">
    <children>
       <HBox alignment="CENTER" prefHeight="65.0" prefWidth="750.0">
          <children>
@@ -30,7 +29,7 @@
       </HBox>
       <HBox layoutY="60.0" maxHeight="800.0" maxWidth="1000.0" minHeight="500.0" minWidth="500.0" prefHeight="540.0" prefWidth="1000.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="532.0" prefWidth="380.0" spacing="10.0">
+            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="338.0" spacing="10.0">
                <children>
                   <GridPane>
                      <columnConstraints>
@@ -98,17 +97,18 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="621.0" spacing="5.0">
+            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="662.0" spacing="5.0">
                <children>
-                  <TableView fx:id="customerTableView" prefHeight="474.0" prefWidth="603.0">
+                  <TableView fx:id="customerTableView" prefHeight="474.0" prefWidth="635.0">
                     <columns>
-                      <TableColumn prefWidth="41.0" text="ID" />
-                      <TableColumn prefWidth="126.0" text="Name" />
-                        <TableColumn prefWidth="137.0" text="Address" />
-                        <TableColumn text="Address2" />
-                        <TableColumn prefWidth="53.0" text="City" />
-                        <TableColumn prefWidth="54.0" text="Country" />
-                        <TableColumn prefWidth="117.0" text="Phone" />
+                      <TableColumn fx:id="customerIdCol" prefWidth="32.0" text="ID" />
+                      <TableColumn fx:id="customerNameCol" prefWidth="129.0" text="Name" />
+                        <TableColumn fx:id="customerAddressCol" prefWidth="137.0" text="Address" />
+                        <TableColumn fx:id="customerAddress2Col" prefWidth="79.0" text="Address2" />
+                        <TableColumn fx:id="customerCityCol" prefWidth="63.0" text="City" />
+                        <TableColumn fx:id="customerPostalCodeCol" prefWidth="75.0" text="Postal Code" />
+                        <TableColumn fx:id="customerCountryCol" prefWidth="51.0" text="Country" />
+                        <TableColumn fx:id="customerPhoneCol" prefWidth="95.0" text="Phone" />
                     </columns>
                   </TableView>
                </children>

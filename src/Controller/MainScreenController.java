@@ -2,8 +2,13 @@
 package Controller;
 
 import DAO.AppointmentDAO;
+import DAO.CustomerDAO;
+import DAO.UserDAO;
 import Model.Appointment;
+import Model.AppointmentList;
 import Model.Customer;
+import Model.CustomerList;
+import Model.UserList;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -11,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,9 +54,6 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, String> weeklyTypeCol;
 
     @FXML
-    private TableColumn<Appointment, String> weeklyDescCol;
-
-    @FXML
     private TableColumn<Appointment, String> weeklyLocationCol;
 
     @FXML
@@ -80,16 +84,13 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, String> monthlyTypeCol;
 
     @FXML
-    private TableColumn<Appointment, String> monthlyDescCol;
-
-    @FXML
     private TableColumn<Appointment, String> monthlyLocationCol;
 
     @FXML
     private TableColumn<Appointment, String> monthlyContactCol;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> monthlyStartTimeCo;
+    private TableColumn<Appointment, LocalDateTime> monthlyStartTimeCol;
 
     @FXML
     private TableColumn<Appointment, LocalDateTime> monthlyEndTimeCol;
@@ -114,20 +115,26 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private TableColumn<Customer, String> customerCityCol;
+    
+    @FXML
+    private TableColumn<Customer, String> customerPostalCodeCol;
 
     @FXML
     private TableColumn<Customer, String> customerCountryCol;
 
     @FXML
     private TableColumn<Customer, String> customerPhoneCol;
+    
+    @FXML
+    private TextArea appointmentAlertTxt;
 
     @FXML
-    void OnActionDeleteAppointment(ActionEvent event) {
+    void onActionDeleteAppointment(ActionEvent event) {
 
     }
 
     @FXML
-    void OnActionModifyAppointment(ActionEvent event) throws IOException {
+    void onActionToModifyAppointment(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/ModifyAppointmentScreen.fxml"));
         stage.setScene(new Scene(scene));
@@ -135,7 +142,7 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    void OnActionToReports(ActionEvent event) throws IOException {
+    void onActionToReports(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/ReportScreen.fxml"));
         stage.setScene(new Scene(scene));
@@ -143,7 +150,7 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    void onActionAddAppointment(ActionEvent event) throws IOException {
+    void onActionToAddAppointment(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/AddAppointmentScreen.fxml"));
         stage.setScene(new Scene(scene));
@@ -151,7 +158,7 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    void onActionAddCustomer(ActionEvent event) throws IOException {
+    void onActionToAddCustomer(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/AddCustomerScreen.fxml"));
         stage.setScene(new Scene(scene));
@@ -159,8 +166,11 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    void onActionDeleteCustomer(ActionEvent event) {
-
+    void onActionDeleteCustomer(ActionEvent event) throws SQLException {
+        
+        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+        CustomerList.deleteFromCustomerList(customer);
+        CustomerDAO.deleteDBCustomer(customer.getCustomerId());
     }
 
     @FXML
@@ -169,31 +179,99 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    void onActionModifyCustomer(ActionEvent event) throws IOException {
+    void onActionToModifyCustomer(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/ModifyCustomerScreen.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
+    
+    // D.   Provide the ability to view the calendar by month and by week.
+    @FXML
+    void onActionNextMonth(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionNextWeek(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionPreviousMonth(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionPreviousWeek(ActionEvent event) {
+
+    }
+    
+    // H.   Write code to provide an alert if there is an appointment within 15 minutes of the user’s log-in.
+    
+    private int alertAppointment() {
+        
+        for (Appointment appointment : AppointmentList.weeklyAppointments) {
+            
+        }
+        
+        return -1;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {     
-            calenderWeeklyView.setItems(AppointmentDAO.getAllAppointments());
+        
+        // Alert reminder set to non-editable to user can not edit in GUI
+        appointmentAlertTxt.setEditable(false);
+        try {
+            UserList.userList = UserDAO.getAllDBUsers();
         } catch (SQLException ex) {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        weeklyIdCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        weeklyCustomerCol.setCellValueFactory(new PropertyValueFactory<>("Customer"));
-        weeklyTitleCol.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        weeklyTypeCol.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        weeklyDescCol.setCellValueFactory(new PropertyValueFactory<>("Description"));
-        weeklyLocationCol.setCellValueFactory(new PropertyValueFactory<>("Location"));
-        weeklyContactCol.setCellValueFactory(new PropertyValueFactory<>("Contact"));
-        weeklyStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("Start Time"));
-        weeklyEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("End Time"));
-        
+
+        // TableViews for customer, weekly appointments and monthly appointments populated
+        try {
+            AppointmentList.weeklyAppointments = AppointmentDAO.getAllAppointments();
+            AppointmentList.monthlyAppointments = AppointmentList.weeklyAppointments;
+            calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
+            
+            CustomerList.customerList = CustomerDAO.getAllDBCustomers();
+            
+            
+            weeklyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
+            weeklyCustomerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
+            weeklyTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+            weeklyTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+            weeklyLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+            weeklyContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+            weeklyStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+            weeklyEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+            
+            calenderMonthlyView.setItems(AppointmentList.monthlyAppointments);
+            
+            monthlyIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+            monthlyCustomerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
+            monthlyTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+            monthlyTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+            monthlyLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+            monthlyContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+            monthlyStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+            monthlyEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+            
+            customerTableView.setItems(CustomerList.customerList);
+            
+            customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());;
+            customerNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerName()));
+            customerAddressCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress()));
+            customerAddress2Col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress2()));
+            customerCityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity()));
+            customerPostalCodeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPostalCode()));
+            customerCountryCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCountry()));
+            customerPhoneCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPhone()));
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
 }

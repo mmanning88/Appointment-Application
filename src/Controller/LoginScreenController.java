@@ -3,6 +3,7 @@ package Controller;
 
 import DAO.UserDAO;
 import Model.User;
+import Model.UserList;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ public class LoginScreenController implements Initializable {
     
     Stage stage;
     Parent scene;
+    ResourceBundle rb = ResourceBundle.getBundle("Localization/Nat", Locale.getDefault());
     
     @FXML
     private Label loginInstructionLbl, titleLbl;
@@ -43,23 +45,33 @@ public class LoginScreenController implements Initializable {
     void onActionExit(ActionEvent event) {   
         System.exit(0);
     }
-
+    
+    /*
+    A. Create a log-in form that can determine the user’s location and 
+    translate log-in and error control messages 
+    (e.g., “The username and password did not match.”) into two languages.
+    */
     @FXML
     void onActionLogin(ActionEvent event) throws IOException, SQLException {
         
         String loginUserName = getUsername();
         String loginPassword = getPassword();
-        User targetUser = getUser();
+        User currentUser = getUser();
+        
+        if (currentUser == null) {
+            loginInstructionLbl.setText(rb.getString("loginError"));
+            return;
+        } 
         
         try {
-            if (loginUserName.equals(targetUser.getUserName()) && loginPassword.equals(targetUser.getPassword())) {
+            if (loginUserName.equals(currentUser.getUserName()) && loginPassword.equals(currentUser.getPassword())) {
+                User.currentUser = currentUser;
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
                 scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             } 
         } catch (NullPointerException nullPointerException) {
-            ResourceBundle rb = ResourceBundle.getBundle("Localization/Nat", Locale.getDefault());
             loginInstructionLbl.setText(rb.getString("loginError"));
         }
         
@@ -67,7 +79,6 @@ public class LoginScreenController implements Initializable {
     }
     
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("Localization/Nat", Locale.getDefault());
         titleLbl.setText(rb.getString("titleLbl"));
         loginInstructionLbl.setText(rb.getString("loginInstructionLbl"));
         usernameTxt.setPromptText(rb.getString("usernameTxt"));
@@ -89,11 +100,14 @@ public class LoginScreenController implements Initializable {
         User user = UserDAO.getDBUser(getUsername());
         return user;
 
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setLanguage();
+        
+        System.out.println(UserList.getUserList());
     }    
     
 }

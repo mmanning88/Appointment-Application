@@ -1,10 +1,13 @@
 
 package DAO;
 
+import Controller.LoginScreenController;
 import Model.Address;
 import Model.Customer;
+import Model.User;
 import Utilities.DBConnection;
 import Utilities.DBQuery;
+import Utilities.DateTimeFormat;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +18,8 @@ import javafx.collections.ObservableList;
 /*
 @author Matthew Manning
 */
+
+// B.   Provide the ability to add, update, and delete customer records in the database, including name, address, and phone number.
 public class CustomerDAO {
     
         public static Customer getDBCustomer(int id) throws SQLException {
@@ -41,8 +46,8 @@ public class CustomerDAO {
         
         public static void deleteDBCustomer(int id) throws SQLException {
             Connection conn = DBConnection.startConnection();
-            String selectCustomer = "DELETE FROM customer WHERE customerId = ?";
-            DBQuery.setPreparedStatement(conn, selectCustomer);
+            String deleteCustomer = "DELETE FROM customer WHERE customerId = ?";
+            DBQuery.setPreparedStatement(conn, deleteCustomer);
             PreparedStatement ps = DBQuery.getPreparedStatement();
             ps.setInt(1, id);
             ps.execute();
@@ -61,25 +66,95 @@ public class CustomerDAO {
             ps.setInt(2, active);
             ps.setInt(3, id);
             ps.execute();
+            
+            // Check if address needs to be updated
+            Address custAddress = customer.getAddress();
+            String checkAddress = "SELECT FROM address where addressId = ?";
+            DBQuery.setPreparedStatement(conn, checkAddress);
+            PreparedStatement ps2 = DBQuery.getPreparedStatement(); 
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Address DBaddress = new Address(rs.getInt("addressId"), rs.getInt("cityId"), rs.getInt("countryId"), 
+                                      rs.getString("address"), rs.getString("address2"), rs.getString("postalCode"), 
+                                      rs.getString("phone"), rs.getString("city"), rs.getString("country"));
+                if ( (DBaddress.getAddress() != custAddress.getAddress()) || (DBaddress.getAddress2() != custAddress.getAddress2()) 
+                        || (DBaddress.getPostalCode() != custAddress.getPostalCode()) || (DBaddress.getPhone()) != custAddress.getPhone()) {                    
+                    updateDBCustomerAddress(customer);  
+                }
+                
+                if ( (DBaddress.getCity() != custAddress.getCity())) {
+                    
+                }
+            }
             DBConnection.closeConnection();
         }
         
-        public static void updateDBCustomerAddress(Customer customer) {
+        public static void updateDBCustomerAddress(Customer customer) throws SQLException {
 
             Connection conn = DBConnection.startConnection();
             Address address = customer.getAddress();
-            String updateAddress = "UPDATE address INNER JOIN city USING (cityId) INNER JOIN country USING (countryID) "
-                    + "SET address.address = 'address', address.address2 = 'adress2' ";
-            
+            String updateAddress = "UPDATE address SET address = ?, address2 = ?, postalCode = ?, "
+                    + "phone = ?, lastUpdate = ?, lastUpdateBy = ? WHERE addressId = ?";
+            DBQuery.setPreparedStatement(conn, updateAddress);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setString(1, address.getAddress());
+            ps.setString(2, address.getAddress2());
+            ps.setString(3, address.getPostalCode());
+            ps.setString(4, address.getPhone());
+            ps.setString(5, DateTimeFormat.getCurrentUTC());
+            ps.setString(6, User.currentUser.getUserName());
+            ps.setInt(7, address.getAddressId());
+            ps.execute();
             
             DBConnection.closeConnection();
         }
         
-        public static void addDBCustomer(Customer customer) {
+        public static void addDBCustomer(Customer customer) throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String addCustomer = "INSERT INTO customer VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+            String findCity = "SELECT * FROM city WHERE cityId = ?";
             
+            // Check if new city or country is needed
+            DBQuery.setPreparedStatement(conn, findCity);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setInt(1, customer.getAddress().getCityId());
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            if (!rs.next()) {
+                addDBCity(customer.getAddress(), conn);
+            }
+            
+            // Execute insert with customer object
+            int active;
+            if (customer.getActive()) {
+                active = 1;
+            } else {
+                active = 0;
+            }
+
+            DBQuery.setPreparedStatement(conn, addCustomer);
+            PreparedStatement ps2 = DBQuery.getPreparedStatement();
+            ps2.setInt(1, customer.getCustomerId());
+            ps2.setString(2, customer.getCustomerName());
+            ps2.setInt(3, customer.getAddress().getAddressId());
+            ps2.setInt(4, active);
+            ps2.setString(5, DateTimeFormat.getCurrentUTC());
+            ps2.setString(6, "admin");
+            ps2.setString(7, DateTimeFormat.getCurrentUTC());
+            ps2.setString(8, "admin");
+            ps2.execute();
+            
+            if (ps2.getUpdateCount() > 0) {
+                System.out.println("Number of rows affects: " + ps.getUpdateCount());
+            } else {
+                System.out.println("No change");
+            }
+            
+            DBConnection.closeConnection();
         }
         
-        public static ObservableList getAllCustomers() throws SQLException {
+        public static ObservableList getAllDBCustomers() throws SQLException {
             ObservableList allCustomers = FXCollections.observableArrayList();
             Connection conn = DBConnection.startConnection();
             String selectAllCustomers = "SELECT * from customer "
@@ -100,6 +175,85 @@ public class CustomerDAO {
             }
             DBConnection.closeConnection();
             return allCustomers;
+        }
+        
+        public static void updateDBCountry(Address address) throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String updateCountry = "UPDATE country SET country = ? WHERE countryId = ?";
+            DBQuery.setPreparedStatement(conn, updateCountry);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setString(1, address.getCountry());
+            ps.setInt(2, address.getCountryId());
+            ps.execute();
+               
+            DBConnection.closeConnection();
+        }
+        
+        public static void updateDBCity(Address address) throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String updateCity = "UPDATE city SET city = ? WHERE cityId = ?";
+            DBQuery.setPreparedStatement(conn, updateCity);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setString(1, address.getCity());
+            ps.setInt(2, address.getCityId());
+            ps.execute();
+               
+            DBConnection.closeConnection();
+        }
+        
+        public static void addDBCity(Address address, Connection conn) throws SQLException {
+            String insertCity = "INSERT INTO city VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String findCountry = "SELECT * FROM country WHERE countryId = ?";
+            
+            // Check if country already exists
+            DBQuery.setPreparedStatement(conn, findCountry);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                addDBCountry(address, conn);
+            }
+            
+            DBQuery.setPreparedStatement(conn, insertCity);
+            PreparedStatement ps2 = DBQuery.getPreparedStatement();
+            ps2.setInt(1, address.getCityId());
+            ps2.setString(2, address.getCity());
+            ps2.setInt(3, address.getCountryId());
+            ps2.setString(4, DateTimeFormat.getCurrentUTC());
+            ps2.setString(5, User.currentUser.getUserName());
+            ps2.setString(6, DateTimeFormat.getCurrentUTC());
+            ps2.setString(7, User.currentUser.getUserName());
+            ps2.execute();
+        }
+        
+        public static void addDBCountry(Address address, Connection conn) throws SQLException {
+            String insertCountry = "INSERT INTO country VALUES(?, ?, ?, ?, ?, ?)";
+            DBQuery.setPreparedStatement(conn, insertCountry);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.setInt(1, address.getCountryId());
+            ps.setString(2, address.getCountry());
+            ps.setString(3, DateTimeFormat.getCurrentUTC());
+            ps.setString(4, User.currentUser.getUserName());
+            ps.setString(5, DateTimeFormat.getCurrentUTC());
+            ps.setString(6, User.currentUser.getUserName());
+            ps.execute();
+        }
+        
+
+        
+        public static int getMaxCustomerID() throws SQLException {
+            Connection conn = DBConnection.startConnection();
+            String getID = "SELECT MAX(customerId) from customer";
+            DBQuery.setPreparedStatement(conn, getID);
+            PreparedStatement ps = DBQuery.getPreparedStatement();
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            
+            rs.next();
+            
+            int highestID = rs.getInt("MAX(customerId)");
+            return highestID;
+
         }
     
 }

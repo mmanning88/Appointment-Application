@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 public class AppointmentList {
     
     public static ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
-    public static ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
+    public static ObservableList<Appointment> monthlyAppointments = weeklyAppointments;
 
     public static ObservableList<Appointment> getWeeklyAppointments() {
         return weeklyAppointments;

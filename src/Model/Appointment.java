@@ -3,6 +3,7 @@ package Model;
 
 // Example constructor
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 //        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
@@ -22,6 +23,8 @@ public class Appointment {
     private final User user;
     private final String title;
     private final String type;
+    private final Timestamp start;
+    private final Timestamp end;
     private final LocalDateTime createDate;
     private final String createdBy;
     private String lastUpdateBy;
@@ -38,14 +41,17 @@ public class Appointment {
         private final User user;
         private final String title;
         private final String type;
+        private final Timestamp start;
+        private final Timestamp end;
         private final LocalDateTime createDate;
         private final String createdBy;
         private String lastUpdateBy;
         private LocalDateTime lastUpdate;
         private String description, location, contact; //Optional
+
         
         public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, User user, String title, 
-                                    String type, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy) {
+                                    String type, Timestamp start, Timestamp end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy) {
             
         this.appointmentId = appointmentId;
         this.customerId = customerId;
@@ -54,6 +60,8 @@ public class Appointment {
         this.user = user;
         this.title = title;
         this.type = type;
+        this.start = start;
+        this.end = end;
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
@@ -91,6 +99,8 @@ public class Appointment {
         this.user = builder.user;
         this.title = builder.title;
         this.type = builder.type;
+        this.start = builder.start;
+        this.end = builder.end;
         this.createDate = builder.createDate;
         this.createdBy = builder.createdBy;
         this.lastUpdate = builder.lastUpdate;
@@ -163,6 +173,16 @@ public class Appointment {
     public String getCreatedBy() {
         return createdBy;
     }
+
+    public Timestamp getStart() {
+        return start;
+    }
+
+    public Timestamp getEnd() {
+        return end;
+    }
+    
+    
     
 
 

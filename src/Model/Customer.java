@@ -10,6 +10,8 @@ public class Customer {
     private int customerId;
     private Boolean active;
     private String customerName;
+
+
     
     // Address property members
     private Address address;
@@ -51,6 +53,11 @@ public class Customer {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+    
+    @Override
+    public String toString() {
+        return this.customerName;
     }
 
     

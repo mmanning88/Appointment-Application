@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 */
 public class User {
     
+    public static User currentUser;
     private int userId;
     private String userName, password, createdBy, lastUpdateBy;
     private LocalDateTime createDate, lastUpdate;
