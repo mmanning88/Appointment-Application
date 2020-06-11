@@ -1,6 +1,8 @@
 
 package Controller;
 
+import DAO.CityDAO;
+import DAO.CountryDAO;
 import DAO.CustomerDAO;
 import Model.Address;
 import Model.Customer;
@@ -75,41 +77,46 @@ public class AddCustomerScreenController implements Initializable {
     @FXML
     void onActionSaveCustomer(ActionEvent event) throws SQLException {
         
-        int cityId, countryId;   
+        boolean needCity, needCountry;
         int customerId = Integer.parseInt(customerIdTxt.getText());
         String customerName = customerNameTxt.getText();
         String address1 = customerAddressTxt.getText();
         String address2 = customerAddressTxt.getText();
         String city = customerCityTxt.getText();
-
+        
         String country = countryCombo.getValue();
         String postalCode = customerPostalCodeTxt.getText();
         String phone = customerPhoneTxt.getText();
+        int countryId = CountryDAO.checkCountry(country);
+        int cityId = CityDAO.checkCity(city);
         
-        
-        if (CustomerList.searchCountry(country) > 0) {
-            countryId = CustomerList.searchCountry(country);
+        if (countryId < 0) {
+            countryId = CountryDAO.getNextCityId();
+            needCountry = true;
         } else {
-            countryId = CustomerList.getCountryNextID();
+            needCountry = false;
         }
         
-        if (CustomerList.searchCity(city) > 0) {
-            cityId = CustomerList.searchCity(city);
+        if (cityId < 0) {
+            cityId = CityDAO.getNextCityId();
+            needCity = true;
         } else {
-            cityId = CustomerList.getCityNextID();
+            needCity = false;
         }
 
-        Address address = new Address(CustomerList.getAddressNextID(), cityId, countryId, address1, address2, postalCode, phone, city, country);
+        Address address = new Address(CustomerDAO.getNextAddressId(), cityId, countryId, address1, address2, postalCode, phone, city, country);
         Customer customer = new Customer(customerId, isActive, customerName, address);
         
         CustomerList.addToCustomerList(customer);
-        CustomerDAO.addDBCustomer(customer);
+        CustomerDAO.addDBCustomer(customer, needCity, needCountry);
+        
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();            
             scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
-        } catch (IOException iOException) {
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -139,14 +146,10 @@ public class AddCustomerScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         fillDataCB();
  
-        CustIdStatic = CustomerList.getCustomerNextID();
+        CustIdStatic = CustomerList.getCustomerNextId();
 
         customerIdTxt.setEditable(false);
-        try {
-            Integer IdStatic = CustomerDAO.getMaxCustomerID();
-        } catch (SQLException ex) {
-            Logger.getLogger(AddCustomerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         customerIdTxt.setText(CustIdStatic.toString());
     }    
     
