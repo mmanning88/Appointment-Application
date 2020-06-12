@@ -24,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -135,6 +136,9 @@ public class MainScreenController implements Initializable {
 
     @FXML
     void onActionToModifyAppointment(ActionEvent event) throws IOException {
+        
+        
+        
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
         scene = FXMLLoader.load(getClass().getResource("/View/ModifyAppointmentScreen.fxml"));
         stage.setScene(new Scene(scene));
@@ -180,10 +184,29 @@ public class MainScreenController implements Initializable {
 
     @FXML
     void onActionToModifyCustomer(ActionEvent event) throws IOException {
+        
+        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+        
+        if (customer == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select customer before modifying.");
+            alert.showAndWait();
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/View/ModifyCustomerScreen.fxml"));
+        loader.load();
+        
+        ModifyCustomerScreenController controller = loader.getController();
+        controller.transferCustomer(customer);
+
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
-        scene = FXMLLoader.load(getClass().getResource("/View/ModifyCustomerScreen.fxml"));
-        stage.setScene(new Scene(scene));
+        Parent newScene = loader.getRoot();
+        stage.setScene(new Scene(newScene));
         stage.show();
+        
     }
     
     // D.   Provide the ability to view the calendar by month and by week.

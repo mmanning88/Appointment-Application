@@ -30,19 +30,7 @@ public class CityDAO {
         ps2.setString(7, User.currentUser.getUserName());
         ps2.execute();
     }
-    
-    public static void updateDBCity(Address address) throws SQLException {
-        Connection conn = DBConnection.startConnection();
-        String updateCity = "UPDATE city SET city = ? WHERE cityId = ?";
-        DBQuery.setPreparedStatement(conn, updateCity);
-        PreparedStatement ps = DBQuery.getPreparedStatement();
-        ps.setString(1, address.getCity());
-        ps.setInt(2, address.getCityId());
-        ps.execute();
-               
-        DBConnection.closeConnection();
-    }
-    
+
     public static int checkCity(String city) throws SQLException {
         Connection conn = DBConnection.startConnection();
         String checkCity = "SELECT * FROM city WHERE city = ?";

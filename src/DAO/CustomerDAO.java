@@ -54,8 +54,19 @@ public class CustomerDAO {
             DBConnection.closeConnection();
         }
         
-        public static void updateDBCustomer(Customer customer, int id) throws SQLException {
+        public static void updateDBCustomer(Customer customer, boolean needNewCity, boolean needNewCountry) throws SQLException {
             Connection conn = DBConnection.startConnection();
+            
+            // Check if new country is needed
+            if (needNewCountry) {
+                CountryDAO.addDBCountry(customer.getAddress(), conn);
+            }
+            
+            // Check if new city is needed
+            if (needNewCity) {
+                CityDAO.addDBCity(customer.getAddress(), conn);
+            }
+            updateDBCustomerAddress(customer, conn);
             String updateCustomer = "UPDATE customer SET customerName = ?, active = ? WHERE customerID = ?";
             DBQuery.setPreparedStatement(conn, updateCustomer);
             PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -64,58 +75,44 @@ public class CustomerDAO {
             int active = customer.getActive() ? 1 : 0;
             ps.setString(1, customer.getCustomerName());
             ps.setInt(2, active);
-            ps.setInt(3, id);
+            ps.setInt(3, customer.getCustomerId());
             ps.execute();
             
-            // Check if address needs to be updated
-            Address custAddress = customer.getAddress();
-            String checkAddress = "SELECT FROM address where addressId = ?";
-            DBQuery.setPreparedStatement(conn, checkAddress);
-            PreparedStatement ps2 = DBQuery.getPreparedStatement(); 
-            ps.execute();
-            ResultSet rs = ps.getResultSet();
-            if (rs.next()) {
-                Address DBaddress = new Address(rs.getInt("addressId"), rs.getInt("cityId"), rs.getInt("countryId"), 
-                                      rs.getString("address"), rs.getString("address2"), rs.getString("postalCode"), 
-                                      rs.getString("phone"), rs.getString("city"), rs.getString("country"));
-                if ( (DBaddress.getAddress() != custAddress.getAddress()) || (DBaddress.getAddress2() != custAddress.getAddress2()) 
-                        || (DBaddress.getPostalCode() != custAddress.getPostalCode()) || (DBaddress.getPhone()) != custAddress.getPhone()) {                    
-                    updateDBCustomerAddress(customer);  
-                }
-                
-                if ( (DBaddress.getCity() != custAddress.getCity())) {
-                    
-                }
-            }
+
+             
+            
             DBConnection.closeConnection();
         }
         
-        public static void updateDBCustomerAddress(Customer customer) throws SQLException {
-
-            Connection conn = DBConnection.startConnection();
+        public static void updateDBCustomerAddress(Customer customer, Connection conn) throws SQLException {
+            
             Address address = customer.getAddress();
-            String updateAddress = "UPDATE address SET address = ?, address2 = ?, postalCode = ?, "
+            String updateAddress = "UPDATE address SET address = ?, address2 = ?, cityId = ?, postalCode = ?, "
                     + "phone = ?, lastUpdate = ?, lastUpdateBy = ? WHERE addressId = ?";
             DBQuery.setPreparedStatement(conn, updateAddress);
             PreparedStatement ps = DBQuery.getPreparedStatement();
             ps.setString(1, address.getAddress());
             ps.setString(2, address.getAddress2());
-            ps.setString(3, address.getPostalCode());
-            ps.setString(4, address.getPhone());
-            ps.setString(5, DateTimeFormat.getCurrentUTC());
-            ps.setString(6, User.currentUser.getUserName());
-            ps.setInt(7, address.getAddressId());
+            ps.setInt(3, address.getCityId());
+            ps.setString(4, address.getPostalCode());
+            ps.setString(5, address.getPhone());
+            ps.setString(6, DateTimeFormat.getCurrentUTC());
+            ps.setString(7, User.currentUser.getUserName());
+            ps.setInt(8, address.getAddressId());
             ps.execute();
-            
-            DBConnection.closeConnection();
+
         }
         
         public static void addDBCustomer(Customer customer, boolean needNewCity, boolean needNewCountry) throws SQLException {
 
             Connection conn = DBConnection.startConnection();
+            
+            // Check if new country is needed
             if (needNewCountry) {
                 CountryDAO.addDBCountry(customer.getAddress(), conn);
             }
+            
+            // Check if new city is needed
             if (needNewCity) {
                 CityDAO.addDBCity(customer.getAddress(), conn);
             }

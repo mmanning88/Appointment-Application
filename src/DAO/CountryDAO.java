@@ -35,17 +35,6 @@ public class CountryDAO {
         ps.execute();
     }
     
-    public static void updateDBCountry(Address address) throws SQLException {
-        Connection conn = DBConnection.startConnection();
-        String updateCountry = "UPDATE country SET country = ? WHERE countryId = ?";
-        DBQuery.setPreparedStatement(conn, updateCountry);
-        PreparedStatement ps = DBQuery.getPreparedStatement();
-        ps.setString(1, address.getCountry());
-        ps.setInt(2, address.getCountryId());
-        ps.execute();
-               
-        DBConnection.closeConnection();
-    }
     
     public static int checkCountry(String country) throws SQLException {
         Connection conn = DBConnection.startConnection();

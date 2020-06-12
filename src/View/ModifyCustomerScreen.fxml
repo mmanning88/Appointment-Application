@@ -5,9 +5,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1100.0" minHeight="500.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyCustomerScreenController">
+<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1100.0" minHeight="500.0" minWidth="383.0" prefHeight="600.0" prefWidth="383.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyCustomerScreenController">
    <children>
-      <HBox alignment="CENTER" prefHeight="65.0" prefWidth="750.0">
+      <HBox alignment="CENTER" prefHeight="65.0" prefWidth="431.0">
          <children>
             <Label prefHeight="51.0" prefWidth="184.0" text="Modify Customer">
                <font>
@@ -27,7 +26,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox layoutY="60.0" maxHeight="800.0" maxWidth="1000.0" minHeight="500.0" minWidth="500.0" prefHeight="540.0" prefWidth="1000.0">
+      <HBox layoutY="60.0" maxHeight="800.0" maxWidth="1000.0" minHeight="500.0" minWidth="377.0" prefHeight="540.0" prefWidth="383.0" spacing="5.0">
          <children>
             <VBox alignment="CENTER" prefHeight="540.0" prefWidth="338.0" spacing="10.0">
                <children>
@@ -47,8 +46,11 @@
                         <Label text="Active" GridPane.rowIndex="2" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onActionActive" text="Yes" />
-                              <RadioButton mnemonicParsing="false" onAction="#onActionInactive" text="No" />
+                              <RadioButton fx:id="activeRB" mnemonicParsing="false" onAction="#onActionActive" text="Yes">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="activeTG" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="inactiveRB" mnemonicParsing="false" onAction="#onActionInactive" text="No" toggleGroup="$activeTG" />
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -78,7 +80,7 @@
                         <Label text="Postal Code" GridPane.rowIndex="3" />
                         <Label text="Country" GridPane.rowIndex="4" />
                         <Label text="Phone" GridPane.rowIndex="5" />
-                        <ComboBox maxWidth="200.0" minWidth="120.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="countryCombo" maxWidth="200.0" minWidth="120.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="customerAddressTxt" maxWidth="200.0" GridPane.columnIndex="1" />
                         <TextField fx:id="customerAddress2Txt" maxWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="customerCityTxt" maxWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -97,26 +99,10 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="540.0" prefWidth="662.0" spacing="5.0">
-               <children>
-                  <TableView fx:id="customerTableView" prefHeight="474.0" prefWidth="635.0">
-                    <columns>
-                      <TableColumn fx:id="customerIdCol" prefWidth="32.0" text="ID" />
-                      <TableColumn fx:id="customerNameCol" prefWidth="129.0" text="Name" />
-                        <TableColumn fx:id="customerAddressCol" prefWidth="137.0" text="Address" />
-                        <TableColumn fx:id="customerAddress2Col" prefWidth="79.0" text="Address2" />
-                        <TableColumn fx:id="customerCityCol" prefWidth="63.0" text="City" />
-                        <TableColumn fx:id="customerPostalCodeCol" prefWidth="75.0" text="Postal Code" />
-                        <TableColumn fx:id="customerCountryCol" prefWidth="51.0" text="Country" />
-                        <TableColumn fx:id="customerPhoneCol" prefWidth="95.0" text="Phone" />
-                    </columns>
-                  </TableView>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </HBox>
    </children>
 </AnchorPane>

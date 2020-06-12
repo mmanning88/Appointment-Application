@@ -81,7 +81,7 @@ public class AddCustomerScreenController implements Initializable {
         int customerId = Integer.parseInt(customerIdTxt.getText());
         String customerName = customerNameTxt.getText();
         String address1 = customerAddressTxt.getText();
-        String address2 = customerAddressTxt.getText();
+        String address2 = customerAddress2Txt.getText();
         String city = customerCityTxt.getText();
         
         String country = countryCombo.getValue();
@@ -106,8 +106,7 @@ public class AddCustomerScreenController implements Initializable {
 
         Address address = new Address(CustomerDAO.getNextAddressId(), cityId, countryId, address1, address2, postalCode, phone, city, country);
         Customer customer = new Customer(customerId, isActive, customerName, address);
-        
-        CustomerList.addToCustomerList(customer);
+
         CustomerDAO.addDBCustomer(customer, needCity, needCountry);
         
         try {
