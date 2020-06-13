@@ -11,6 +11,7 @@ import Utilities.DateTimeFormat;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -130,10 +131,17 @@ public class AddAppointmentScreenController implements Initializable {
         LocalTime endTime = null;
         try {
             ld = startDatePicker.getValue();
-            startTime = LocalTime.parse(startTimeTxt.getText() + ":00", DateTimeFormat.formatterTime);
-            endTime = LocalTime.parse(endTimeTxt.getText() + ":00", DateTimeFormat.formatterTime);
+            startTime = LocalTime.parse(startTimeTxt.getText(), DateTimeFormat.formatterTime);
+            endTime = LocalTime.parse(endTimeTxt.getText(), DateTimeFormat.formatterTime);
         } catch (NullPointerException e) {
             System.out.println(e.getMessage());
+            // Exception control for improper minute ad hour entry
+        } catch (DateTimeException eDate) {
+            Alert alertTime = new Alert(Alert.AlertType.ERROR);
+            alertTime.setTitle("Customer Error");
+            alertTime.setContentText(eDate.getMessage());
+            alertTime.showAndWait();
+            return;
         }
         LocalDateTime start = null;
         LocalDateTime end = null;
@@ -143,6 +151,7 @@ public class AddAppointmentScreenController implements Initializable {
         } catch (DateTimeParseException e) {
             System.out.println(e.getMessage());
         }
+
         
         String description = appointmentDescTxt.getText();
         String location = appointmentLocationTxt.getText();
@@ -171,16 +180,29 @@ public class AddAppointmentScreenController implements Initializable {
             alert.showAndWait();
             return;
         }
-        
+ 
         // Creates local date time with user timezone              
         ZoneId localTZ = ZoneId.of(TimeZone.getDefault().getID());
         ZonedDateTime startLocalTime = ZonedDateTime.of(start, localTZ);
         ZonedDateTime endLocalTime = ZonedDateTime.of(end, localTZ);
+        
+        // Check for overlapping appointments
+        //(StartA < EndB) and (EndA > StartB)
+        for (Appointment appointment : AppointmentList.getMonthlyAppointments()) {
+            if (startLocalTime.isBefore(appointment.getEnd()) && endLocalTime.isAfter(appointment.getStart())) {
+                alert.setTitle("Time Error");
+                alert.setContentText("Appointment " + startLocalTime + " to " + endLocalTime + " overlaps with appointment " 
+                        + appointment.getAppointmentId() + " : " + appointment.getStart() + " to " + appointment.getEnd());
+                alert.showAndWait();
+                return;
+            }
+        }
 
         Appointment appointment = new Appointment.AppointmentBuilder(appointmentId, customerId, customer, user, title, type, startLocalTime, endLocalTime)
                     .setContact(contact)
                     .setDescription(description)
                     .setLocation(location).build();   
+        
         
         AppointmentDAO.addAppointmentDB(appointment);
         try {
@@ -215,6 +237,8 @@ public class AddAppointmentScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         fillTypeCB();
+        
+        // Listener for selecting customer
         customerTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> 
         {
             if (newVal != null) {

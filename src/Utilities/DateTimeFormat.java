@@ -16,7 +16,9 @@ public class DateTimeFormat {
     
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
+    public static DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH");
+    public static DateTimeFormatter formatterMinute = DateTimeFormatter.ofPattern("mm");
     public static DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static LocalDateTime getCurrentLDT() {

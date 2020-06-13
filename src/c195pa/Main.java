@@ -43,11 +43,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         launch(args);
-//        
-//        ZonedDateTime now = ZonedDateTime.now();
-//        Timestamp timestamp = Timestamp.valueOf(now.toLocalDateTime());
-//        String s = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timestamp);
-//        System.out.println(s);
+
         System.exit(0);
     }
     

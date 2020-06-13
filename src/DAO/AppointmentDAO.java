@@ -63,7 +63,7 @@ public class AppointmentDAO {
         ZonedDateTime localStartDT = startUTC.atZone(localTZ);
             
         ZonedDateTime endDT = ZonedDateTime.of(rs.getTimestamp("end").toLocalDateTime(), ZoneOffset.UTC);
-        Instant endUTC = startDT.toInstant();
+        Instant endUTC = endDT.toInstant();
         ZonedDateTime localEndDT = endUTC.atZone(localTZ);
         
         
@@ -80,8 +80,8 @@ public class AppointmentDAO {
         Appointment appointment = new Appointment.AppointmentBuilder(appointmentId, customer.getCustomerId(), 
                                                                     customer, user, title, type, localStartDT, localEndDT)
                                 .setContact(contact)
-                                .setDescription(location)
-                                .setLocation(description).build();
+                                .setDescription(description)
+                                .setLocation(location).build();
         DBConnection.closeConnection();
         return appointment;
     }
@@ -102,41 +102,15 @@ public class AppointmentDAO {
             String title = rs.getString("title");
             String type = rs.getString("type");
 
-            //ZonedDateTime dt = ZonedDateTime.ofInstant(rs.getTimestamp("datetime").toInstant(), UTCZONEID)
-            
-            
             ZoneId localTZ = ZoneId.of(TimeZone.getDefault().getID());
             ZonedDateTime startDT = ZonedDateTime.of(rs.getTimestamp("start").toLocalDateTime(), ZoneOffset.UTC);
             Instant startUTC = startDT.toInstant();
             ZonedDateTime localStartDT = startUTC.atZone(localTZ);
             
             ZonedDateTime endDT = ZonedDateTime.of(rs.getTimestamp("end").toLocalDateTime(), ZoneOffset.UTC);
-            Instant endUTC = startDT.toInstant();
+            Instant endUTC = endDT.toInstant();
             ZonedDateTime localEndDT = endUTC.atZone(localTZ);
-            
-//        LocalDate parisDate = LocalDate.of(2019, 5, 28);
-//        LocalTime parisTime = LocalTime.of(02, 00);
-//        ZoneId parisZoneId = ZoneId.of("Europe/Paris");
-//        ZonedDateTime parisZDT = ZonedDateTime.of(parisDate, parisTime, parisZoneId);
-//        ZoneId localZoneId = ZoneId.of(TimeZone.getDefault().getID());
-//        
-//        Instant parisToGMTInstant = parisZDT.toInstant();
-//        ZonedDateTime parisToLocalZDT = parisZDT.withZoneSameInstant(localZoneId);
-//        ZonedDateTime gmtToLocalZDT = parisToGMTInstant.atZone(localZoneId);
-//        
-//        System.out.println("Local: " + ZonedDateTime.now());
-//        System.out.println("Paris: " + parisZDT);
-//        System.out.println("Paris->GMT: " + parisToGMTInstant);
-//        System.out.println("GMT->Local: " + gmtToLocalZDT);
-//        System.out.println("GMT->LocaleDate: " + gmtToLocalZDT.toLocalDate());
-//        System.out.println("GMT->LocaleTime: " + gmtToLocalZDT.toLocalTime());
-//        
-//        String date = String.valueOf(gmtToLocalZDT.toLocalDate());
-//        String time = String.valueOf(gmtToLocalZDT.toLocalTime());
-//        String dateTime = date + " " + time;
-//        System.out.println(dateTime); //MySql insertion format
-
-            
+                    
             String contact = rs.getString("contact");
             String location = rs.getString("location");
             String description = rs.getString("description");
@@ -148,10 +122,10 @@ public class AppointmentDAO {
             Customer customer = new Customer(rs.getInt("customerId"), rs.getInt("active"), rs.getString("customerName"), address);        
             //appointment created
             Appointment appointment = new Appointment.AppointmentBuilder(appointmentId, customer.getCustomerId(), 
-                                                                    customer, targetUser, title, type, localStartDT, endDT)
+                                                                    customer, targetUser, title, type, localStartDT, localEndDT)
                                 .setContact(contact)
-                                .setDescription(location)
-                                .setLocation(description).build();
+                                .setDescription(description)
+                                .setLocation(location).build();
             
             allAppointments.add(appointment);
         }
@@ -186,6 +160,34 @@ public class AppointmentDAO {
         ps.setString(13, User.currentUser.getUserName());
         ps.setString(14, DateTimeFormat.getCurrentUTC());
         ps.setString(15, User.currentUser.getUserName());
+        ps.execute();
+        
+        DBConnection.closeConnection();
+    }
+    
+    public static void modifyAppointmentDB(Appointment appointment) throws SQLException {
+        Connection conn = DBConnection.startConnection();
+        String updateAppointment = "UPDATE appointment SET customerId = ?, title = ?, description = ?, location = ?, "
+                    + "contact = ?, type = ?, start = ?, end = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+        DBQuery.setPreparedStatement(conn, updateAppointment);
+        PreparedStatement ps = DBQuery.getPreparedStatement();
+        
+        ZonedDateTime startUTC = appointment.getStart().withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = appointment.getEnd().withZoneSameInstant(ZoneId.of("UTC"));
+        Timestamp startTS = Timestamp.valueOf(startUTC.toLocalDateTime());
+        Timestamp endTS = Timestamp.valueOf(endUTC.toLocalDateTime());
+        
+        ps.setInt(1, appointment.getCustomerId());
+        ps.setString(2, appointment.getTitle());
+        ps.setString(3, appointment.getDescription());
+        ps.setString(4, appointment.getLocation());
+        ps.setString(5, appointment.getContact());
+        ps.setString(6, appointment.getType());
+        ps.setTimestamp(7, startTS);
+        ps.setTimestamp(8, endTS);
+        ps.setString(9, DateTimeFormat.getCurrentUTC());
+        ps.setString(10, appointment.getUser().getUserName());
+        ps.setInt(11, appointment.getAppointmentId());
         ps.execute();
         
         DBConnection.closeConnection();

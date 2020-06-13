@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -156,12 +158,66 @@ public class MainScreenController implements Initializable {
     @FXML
     void onActionToModifyAppointment(ActionEvent event) throws IOException {
         
+        Appointment appointmentMonth = calenderMonthlyView.getSelectionModel().getSelectedItem();
+        Appointment appointmentWeek = calenderWeeklyView.getSelectionModel().getSelectedItem();
         
+        Appointment appointment = validateAppointmentSelection(appointmentWeek, appointmentMonth);
         
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/View/ModifyAppointmentScreen.fxml"));
+        loader.load();
+        
+        ModifyAppointmentScreenController controller = loader.getController();
+        controller.transferAppointment(appointment);
+
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
-        scene = FXMLLoader.load(getClass().getResource("/View/ModifyAppointmentScreen.fxml"));
-        stage.setScene(new Scene(scene));
+        Parent newScene = loader.getRoot();
+        stage.setScene(new Scene(newScene));
         stage.show();
+    }
+    
+    @FXML
+    void onActionToModifyCustomer(ActionEvent event) throws IOException {
+        
+        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+        
+        if (customer == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select customer before modifying.");
+            alert.showAndWait();
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/View/ModifyCustomerScreen.fxml"));
+        loader.load();
+        
+        ModifyCustomerScreenController controller = loader.getController();
+        controller.transferCustomer(customer);
+
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
+        Parent newScene = loader.getRoot();
+        stage.setScene(new Scene(newScene));
+        stage.show();
+        
+    }
+    
+    public Appointment validateAppointmentSelection(Appointment weeklyAppointment, Appointment monthlyAppointment) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (monthlyAppointment != weeklyAppointment && monthlyAppointment != null && weeklyAppointment != null) {
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select one appointment before modifying.");
+            alert.showAndWait();
+            return null;
+        } else if (monthlyAppointment == null && weeklyAppointment == null) {
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select one appointment before modifying.");
+            alert.showAndWait();
+            return null;
+        }
+        
+        return weeklyAppointment;
     }
 
     @FXML
@@ -212,32 +268,7 @@ public class MainScreenController implements Initializable {
         System.exit(0);
     }
 
-    @FXML
-    void onActionToModifyCustomer(ActionEvent event) throws IOException {
-        
-        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
-        
-        if (customer == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Warning Dialog");
-            alert.setContentText("Please select customer before modifying.");
-            alert.showAndWait();
-            return;
-        }
-        
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/View/ModifyCustomerScreen.fxml"));
-        loader.load();
-        
-        ModifyCustomerScreenController controller = loader.getController();
-        controller.transferCustomer(customer);
 
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
-        Parent newScene = loader.getRoot();
-        stage.setScene(new Scene(newScene));
-        stage.show();
-        
-    }
     
     // D.   Provide the ability to view the calendar by month and by week.
     @FXML
@@ -260,19 +291,48 @@ public class MainScreenController implements Initializable {
 
     }
     
-    // H.   Write code to provide an alert if there is an appointment within 15 minutes of the user’s log-in.
-    
-    private int alertAppointment() {
-        
+    // Check is any appointment is within 15 minutes of starting
+    private void alertAppointment() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        LocalTime currentTime = LocalTime.now();
+        long interval;
         for (Appointment appointment : AppointmentList.weeklyAppointments) {
-            
+            LocalTime startTime = appointment.getStart().toLocalTime();
+            interval = ChronoUnit.MINUTES.between(currentTime, startTime);
+            if (interval > 0 && interval <= 15) {
+                alert.setTitle("Upcoming appointment(s)");
+                alert.setContentText("There is an appointment starting in " + interval + " minutes");
+                alert.showAndWait();
+                System.out.println("You have an event in " + interval + " approx minute(s)");
+                appointmentAlertTxt.setText("Appointment with " +  appointment.getCustomer().getCustomerName() + " in " + interval + " minutes.");
+            } 
         }
-        
-        return -1;
+
+
+    }
+    
+    // Create listener so only one appointment can be selected at a time
+    private void appointmentListener() {
+        calenderWeeklyView.getSelectionModel().selectedItemProperty().addListener((obs, oldAppointment, newAppointment) -> {
+            if (newAppointment != null) {
+                calenderMonthlyView.getSelectionModel().clearSelection();
+                descriptionTxtAreaWeekly.setText(newAppointment.getDescription());
+            }
+        });
+
+        calenderMonthlyView.getSelectionModel().selectedItemProperty().addListener((obs, oldAppointment, newAppointment) -> {
+            if (newAppointment != null) {
+                calenderWeeklyView.getSelectionModel().clearSelection();
+                descriptionTxtAreaMonthly.setText(newAppointment.getDescription());
+            }
+        });
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        descriptionTxtAreaWeekly.setEditable(false);
+        descriptionTxtAreaMonthly.setEditable(false);
         
         // Alert reminder set to non-editable to user can not edit in GUI
         appointmentAlertTxt.setEditable(false);
@@ -326,6 +386,8 @@ public class MainScreenController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        appointmentListener();
+        alertAppointment();
     }    
     
 }
