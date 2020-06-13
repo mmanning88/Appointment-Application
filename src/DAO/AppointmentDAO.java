@@ -78,7 +78,7 @@ public class AppointmentDAO {
         Customer customer = new Customer(rs.getInt("customerId"), rs.getInt("active"), rs.getString("customerName"), address);        
         //appointment created
         Appointment appointment = new Appointment.AppointmentBuilder(appointmentId, customer.getCustomerId(), 
-                                                                    customer, user, title, type, startLocalZDT, endLocalZDT)
+                                                                    customer, user, title, type, localStartDT, localEndDT)
                                 .setContact(contact)
                                 .setDescription(location)
                                 .setLocation(description).build();
