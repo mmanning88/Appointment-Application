@@ -46,6 +46,17 @@ public class AppointmentList {
     
     }
     
+        public static int getAppointmentNextId() {
+        
+            int maxId = 0;
+            for (Appointment appointment : getWeeklyAppointments()) {
+                if (appointment.getAppointmentId() > maxId) {
+                    maxId = appointment.getAppointmentId();
+                }
+            }
+            return maxId + 1;
+    }
+    
     
     
         

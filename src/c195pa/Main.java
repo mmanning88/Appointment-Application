@@ -9,7 +9,13 @@ import Model.CustomerList;
 import Model.UserList;
 import Utilities.DateTimeFormat;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import javafx.application.Application;
@@ -37,6 +43,11 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         launch(args);
+//        
+//        ZonedDateTime now = ZonedDateTime.now();
+//        Timestamp timestamp = Timestamp.valueOf(now.toLocalDateTime());
+//        String s = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timestamp);
+//        System.out.println(s);
         System.exit(0);
     }
     

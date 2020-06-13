@@ -1,6 +1,7 @@
 
 package Utilities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -13,8 +14,21 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeFormat {
     
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    public static LocalDateTime getCurrentLDT() {
+        LocalDateTime ldt = LocalDateTime.parse(getNow(), formatter);
+        return ldt;
+    }
+    
+    public static String getDate() {
+        LocalDate date = LocalDate.now();
+        String dateFormat = date.format(formatterDate);
+        return dateFormat;
+    }
     
     public static String getNow() {
         LocalDateTime now = LocalDateTime.now();

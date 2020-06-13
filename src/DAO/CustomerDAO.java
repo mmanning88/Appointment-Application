@@ -4,6 +4,7 @@ package DAO;
 import Controller.LoginScreenController;
 import Model.Address;
 import Model.Customer;
+import Model.CustomerList;
 import Model.User;
 import Utilities.DBConnection;
 import Utilities.DBQuery;
@@ -44,12 +45,22 @@ public class CustomerDAO {
             return customer;
         }
         
+        // Delete customer and attached Address
         public static void deleteDBCustomer(int id) throws SQLException {
             Connection conn = DBConnection.startConnection();
+            Address address = CustomerList.searchCustomerList(id).getAddress();
+            
             String deleteCustomer = "DELETE FROM customer WHERE customerId = ?";
             DBQuery.setPreparedStatement(conn, deleteCustomer);
+            PreparedStatement ps2 = DBQuery.getPreparedStatement();
+            ps2.setInt(1, id);
+            ps2.execute();
+
+            
+            String deleteAddress = "DELETE FROM address WHERE addressId = ?";       
+            DBQuery.setPreparedStatement(conn, deleteAddress);
             PreparedStatement ps = DBQuery.getPreparedStatement();
-            ps.setInt(1, id);
+            ps.setInt(1, address.getAddressId());
             ps.execute();
             DBConnection.closeConnection();
         }
@@ -66,20 +77,20 @@ public class CustomerDAO {
             if (needNewCity) {
                 CityDAO.addDBCity(customer.getAddress(), conn);
             }
+            
+            // Update address
             updateDBCustomerAddress(customer, conn);
-            String updateCustomer = "UPDATE customer SET customerName = ?, active = ? WHERE customerID = ?";
+            String updateCustomer = "UPDATE customer SET customerName = ?, active = ?, lastUpdate = ?, lastUpdateBy = ?,   WHERE customerID = ?";
             DBQuery.setPreparedStatement(conn, updateCustomer);
             PreparedStatement ps = DBQuery.getPreparedStatement();
             
             // 1 = active/true 0 = inactive/false
-            int active = customer.getActive() ? 1 : 0;
             ps.setString(1, customer.getCustomerName());
-            ps.setInt(2, active);
-            ps.setInt(3, customer.getCustomerId());
+            ps.setInt(2, customer.getActive()); 
+            ps.setString(3, User.currentUser.getUserName());
+            ps.setString(4, DateTimeFormat.getCurrentUTC());
+            ps.setInt(5, customer.getCustomerId());
             ps.execute();
-            
-
-             
             
             DBConnection.closeConnection();
         }
@@ -120,19 +131,14 @@ public class CustomerDAO {
             String addCustomer = "INSERT INTO customer VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                     
             // Execute insert with customer object
-            int active;
-            if (customer.getActive()) {
-                active = 1;
-            } else {
-                active = 0;
-            }
+
 
             DBQuery.setPreparedStatement(conn, addCustomer);
             PreparedStatement ps = DBQuery.getPreparedStatement();
             ps.setInt(1, customer.getCustomerId());
             ps.setString(2, customer.getCustomerName());
             ps.setInt(3, customer.getAddress().getAddressId());
-            ps.setInt(4, active);
+            ps.setInt(4, customer.getActive());
             ps.setString(5, DateTimeFormat.getCurrentUTC());
             ps.setString(6, "admin");
             ps.setString(7, DateTimeFormat.getCurrentUTC());
@@ -159,6 +165,7 @@ public class CustomerDAO {
             PreparedStatement ps = DBQuery.getPreparedStatement();
             ps.execute();
             ResultSet rs = ps.getResultSet();
+            
             while (rs.next()) {
                 Address address = new Address(rs.getInt("addressId"), rs.getInt("cityId"), rs.getInt("countryId"), 
                                             rs.getString("address"), rs.getString("address2"), rs.getString("postalCode"), 
@@ -201,8 +208,9 @@ public class CustomerDAO {
             rs.next();
             
             int highestID = rs.getInt("MAX(addressId)");
+            DBConnection.closeConnection();
             return highestID + 1;
-
+            
         }
         
         

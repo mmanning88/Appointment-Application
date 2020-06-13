@@ -3,8 +3,16 @@ package Model;
 
 // Example constructor
 
+import Utilities.DateTimeFormat;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
 
 //        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
 //                .setContact("Test Contact")
@@ -18,17 +26,12 @@ public class Appointment {
 
     private final int appointmentId;
     private final int customerId;
-    private final int userId;
     private final Customer customer;
     private final User user;
     private final String title;
     private final String type;
-    private final Timestamp start;
-    private final Timestamp end;
-    private final LocalDateTime createDate;
-    private final String createdBy;
-    private String lastUpdateBy;
-    private LocalDateTime lastUpdate;
+    private final ZonedDateTime start;
+    private final ZonedDateTime end;
     private final String description; //Optional
     private final String location; //Optional
     private final String contact; //Optional
@@ -36,36 +39,29 @@ public class Appointment {
     // Builder pattern handles optional parameters
     public static class AppointmentBuilder {
         
-        private final int appointmentId, customerId, userId;
+        private final int appointmentId, customerId;
         private final Customer customer;
         private final User user;
         private final String title;
         private final String type;
-        private final Timestamp start;
-        private final Timestamp end;
-        private final LocalDateTime createDate;
-        private final String createdBy;
-        private String lastUpdateBy;
-        private LocalDateTime lastUpdate;
+        private final ZonedDateTime start;
+        private final ZonedDateTime end;
+
         private String description, location, contact; //Optional
 
         
-        public AppointmentBuilder(int appointmentId, int customerId, int userId, Customer customer, User user, String title, 
-                                    String type, Timestamp start, Timestamp end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy) {
+        public AppointmentBuilder(int appointmentId, int customerId, Customer customer, User user, String title, 
+                                    String type, ZonedDateTime start, ZonedDateTime end) {
             
         this.appointmentId = appointmentId;
         this.customerId = customerId;
-        this.userId = userId;
         this.customer = customer;
         this.user = user;
         this.title = title;
         this.type = type;
         this.start = start;
         this.end = end;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdateBy = lastUpdateBy;
+
         
         }
         
@@ -94,17 +90,12 @@ public class Appointment {
     private Appointment(AppointmentBuilder builder) {
         this.appointmentId = builder.appointmentId;
         this.customerId = builder.customerId;
-        this.userId = builder.userId;
         this.customer = builder.customer;
         this.user = builder.user;
         this.title = builder.title;
         this.type = builder.type;
         this.start = builder.start;
         this.end = builder.end;
-        this.createDate = builder.createDate;
-        this.createdBy = builder.createdBy;
-        this.lastUpdate = builder.lastUpdate;
-        this.lastUpdateBy = builder.lastUpdateBy;
         this.description = builder.description;
         this.location = builder.location;
         this.contact = builder.contact;
@@ -116,10 +107,6 @@ public class Appointment {
 
     public int getCustomerId() {
         return customerId;
-    }
-
-    public int getUserId() {
-        return userId;
     }
 
     public Customer getCustomer() {
@@ -146,44 +133,54 @@ public class Appointment {
         return contact;
     }
 
-    public String getLastUpdateBy() {
-        return lastUpdateBy;
-    }
-
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
     public User getUser() {
         return user;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public Timestamp getStart() {
+    public ZonedDateTime getStart() {
         return start;
     }
 
-    public Timestamp getEnd() {
+    public ZonedDateTime getEnd() {
         return end;
+    }
+
+    public String getDateTimeStartString() {
+        String date = String.valueOf(this.start.toLocalDate());
+        String time = String.valueOf(this.start.toLocalTime());
+        String dateTime = date + " " + time;
+        return dateTime;
+    }
+    
+        public String getDateTimeEndString() {
+        String date = String.valueOf(this.end.toLocalDate());
+        String time = String.valueOf(this.end.toLocalTime());
+        String dateTime = date + " " + time;
+        return dateTime;
     }
     
     
-    
+//            LocalDate parisDate = LocalDate.of(2019, 5, 28);
+//        LocalTime parisTime = LocalTime.of(02, 00);
+//        ZoneId parisZoneId = ZoneId.of("Europe/Paris");
+//        ZonedDateTime parisZDT = ZonedDateTime.of(parisDate, parisTime, parisZoneId);
+//        ZoneId localZoneId = ZoneId.of(TimeZone.getDefault().getID());
+//        
+//        Instant parisToGMTInstant = parisZDT.toInstant();
+//        ZonedDateTime parisToLocalZDT = parisZDT.withZoneSameInstant(localZoneId);
+//        ZonedDateTime gmtToLocalZDT = parisToGMTInstant.atZone(localZoneId);
+//        
+//        System.out.println("Local: " + ZonedDateTime.now());
+//        System.out.println("Paris: " + parisZDT);
+//        System.out.println("Paris->GMT: " + parisToGMTInstant);
+//        System.out.println("GMT->Local: " + gmtToLocalZDT);
+//        System.out.println("GMT->LocaleDate: " + gmtToLocalZDT.toLocalDate());
+//        System.out.println("GMT->LocaleTime: " + gmtToLocalZDT.toLocalTime());
+//        
+//        String date = String.valueOf(gmtToLocalZDT.toLocalDate());
+//        String time = String.valueOf(gmtToLocalZDT.toLocalTime());
+//        String dateTime = date + " " + time;
+//        System.out.println(dateTime); //MySql insertion format
 
 
     

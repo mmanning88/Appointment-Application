@@ -158,7 +158,7 @@ public class ModifyCustomerScreenController implements Initializable {
         customerPhoneTxt.setText(String.valueOf(customer.getAddress().getPhone()));
         countryCombo.setValue(customer.getAddress().getCountry());
         
-        if (customer.getActive()) {
+        if (customer.getActive() == 1) {
             activeRB.setSelected(true);
         } else {
             inactiveRB.setSelected(true);

@@ -40,11 +40,11 @@
                   <Label text="Active" GridPane.rowIndex="2" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <RadioButton mnemonicParsing="false" onAction="#onActionActive" text="Yes">
+                        <RadioButton fx:id="activeRB" mnemonicParsing="false" onAction="#onActionActive" text="Yes">
                            <toggleGroup>
                               <ToggleGroup fx:id="isActiveTG" />
                            </toggleGroup></RadioButton>
-                        <RadioButton mnemonicParsing="false" onAction="#onActionInactive" text="No" toggleGroup="$isActiveTG" />
+                        <RadioButton fx:id="inactiveRB" mnemonicParsing="false" onAction="#onActionInactive" text="No" toggleGroup="$isActiveTG" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

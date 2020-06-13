@@ -8,7 +8,7 @@ public class Customer {
     
     // Customer property members
     private int customerId;
-    private Boolean active;
+    private int active;
     private String customerName;
 
 
@@ -18,7 +18,7 @@ public class Customer {
 
     public Customer(int customerId, int active, String customerName, Address address) {
         this.customerId = customerId;
-        this.active = active == 1;
+        this.active = active;
         this.customerName = customerName;
         this.address = address;
     }
@@ -31,11 +31,11 @@ public class Customer {
         this.customerId = customerId;
     }
 
-    public Boolean getActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 

@@ -23,9 +23,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 /*
 @author Matthew Manning
@@ -59,6 +62,9 @@ public class AddCustomerScreenController implements Initializable {
     @FXML
     private ComboBox<String> countryCombo;
     
+    @FXML
+    private RadioButton activeRB, inactiveRB;
+
     private Integer CustIdStatic;
 
     private int isActive;
@@ -87,6 +93,43 @@ public class AddCustomerScreenController implements Initializable {
         String country = countryCombo.getValue();
         String postalCode = customerPostalCodeTxt.getText();
         String phone = customerPhoneTxt.getText();
+        
+        // Check to see if required fields have been filled out
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (customerName.isEmpty()) {
+
+            alert.setTitle("Customer Name Error");
+            alert.setContentText("Customer must have a name");
+            alert.showAndWait();
+            return;
+        } else if (address1.isEmpty()) {
+            alert.setTitle("Customer Address Error");
+            alert.setContentText("Address field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (city.isEmpty()) {
+            alert.setTitle("Customer City Error");
+            alert.setContentText("City field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (postalCode.isEmpty()) {
+            alert.setTitle("Customer Postal Code Error");
+            alert.setContentText("Postal Code field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (phone.isEmpty()) {
+            alert.setTitle("Customer Phone Error");
+            alert.setContentText("Phone field must be filled out");
+            alert.showAndWait();
+            return;
+        }  else if (country.isEmpty()) {
+            alert.setTitle("Customer Country Error");
+            alert.setContentText("Country must be selected");
+            alert.showAndWait();
+            return;
+        }
+
+        // Check if new city or country is needed
         int countryId = CountryDAO.checkCountry(country);
         int cityId = CityDAO.checkCity(city);
         
@@ -103,7 +146,8 @@ public class AddCustomerScreenController implements Initializable {
         } else {
             needCity = false;
         }
-
+        
+        
         Address address = new Address(CustomerDAO.getNextAddressId(), cityId, countryId, address1, address2, postalCode, phone, city, country);
         Customer customer = new Customer(customerId, isActive, customerName, address);
 

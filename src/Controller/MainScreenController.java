@@ -13,9 +13,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -26,6 +28,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -46,7 +50,7 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, Integer> weeklyIdCol;
 
     @FXML
-    private TableColumn<Appointment, Customer> weeklyCustomerCol;
+    private TableColumn<Appointment, String> weeklyCustomerCol;
 
     @FXML
     private TableColumn<Appointment, String> weeklyTitleCol;
@@ -61,10 +65,10 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, String> weeklyContactCol;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> weeklyStartTimeCol;
+    private TableColumn<Appointment, String> weeklyStartTimeCol;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> weeklyEndTimeCol;
+    private TableColumn<Appointment, String> weeklyEndTimeCol;
 
     @FXML
     private TextArea descriptionTxtAreaWeekly;
@@ -76,7 +80,7 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, Integer> monthlyIdCol;
 
     @FXML
-    private TableColumn<Customer, String> monthlyCustomerCol;
+    private TableColumn<Appointment, String> monthlyCustomerCol;
 
     @FXML
     private TableColumn<Appointment, String> monthlyTitleCol;
@@ -91,10 +95,10 @@ public class MainScreenController implements Initializable {
     private TableColumn<Appointment, String> monthlyContactCol;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> monthlyStartTimeCol;
+    private TableColumn<Appointment, String> monthlyStartTimeCol;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> monthlyEndTimeCol;
+    private TableColumn<Appointment, String> monthlyEndTimeCol;
 
     @FXML
     private TextArea descriptionTxtAreaMonthly;
@@ -127,11 +131,26 @@ public class MainScreenController implements Initializable {
     private TableColumn<Customer, String> customerPhoneCol;
     
     @FXML
+    private TableColumn<Customer, Integer> customerActiveCol;
+    
+    @FXML
     private TextArea appointmentAlertTxt;
+    
+    @FXML
+    private Label currentWeek, currentMonth;
 
     @FXML
-    void onActionDeleteAppointment(ActionEvent event) {
-
+    void onActionDeleteAppointment(ActionEvent event) throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Delete Appointment Confirmation");
+        alert.setContentText("Are you sure?");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Appointment appointment = calenderWeeklyView.getSelectionModel().getSelectedItem();
+            AppointmentDAO.deleteAppointmentDB(appointment.getAppointmentId());
+            AppointmentList.deleteFromAppointmentList(appointment);
+        }
     }
 
     @FXML
@@ -171,10 +190,21 @@ public class MainScreenController implements Initializable {
 
     @FXML
     void onActionDeleteCustomer(ActionEvent event) throws SQLException {
+
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Delete Customer Confirmation");
+        alert.setContentText("Are you sure?");
         
-        Customer customer = customerTableView.getSelectionModel().getSelectedItem();
-        CustomerList.deleteFromCustomerList(customer);
-        CustomerDAO.deleteDBCustomer(customer.getCustomerId());
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // DAO action must be performed first, uses CustomerList to find address
+            Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+            CustomerDAO.deleteDBCustomer(customer.getCustomerId());
+            CustomerList.deleteFromCustomerList(customer);
+        }
+
+        
+
     }
 
     @FXML
@@ -254,7 +284,7 @@ public class MainScreenController implements Initializable {
 
         // TableViews for customer, weekly appointments and monthly appointments populated
         try {
-            AppointmentList.weeklyAppointments = AppointmentDAO.getAllAppointments();
+            AppointmentList.weeklyAppointments = AppointmentDAO.getAllAppointmentsDB();
             AppointmentList.monthlyAppointments = AppointmentList.weeklyAppointments;
             calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
             
@@ -262,28 +292,28 @@ public class MainScreenController implements Initializable {
             
             
             weeklyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
-            weeklyCustomerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
-            weeklyTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-            weeklyTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-            weeklyLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-            weeklyContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-            weeklyStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-            weeklyEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+            weeklyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
+            weeklyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+            weeklyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
+            weeklyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
+            weeklyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
+            weeklyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
+            weeklyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
             
             calenderMonthlyView.setItems(AppointmentList.monthlyAppointments);
             
-            monthlyIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-            monthlyCustomerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
-            monthlyTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-            monthlyTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-            monthlyLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-            monthlyContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-            monthlyStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-            monthlyEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+            monthlyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
+            monthlyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
+            monthlyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+            monthlyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
+            monthlyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
+            monthlyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
+            monthlyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
+            monthlyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
             
             customerTableView.setItems(CustomerList.customerList);
             
-            customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());;
+            customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());
             customerNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerName()));
             customerAddressCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress()));
             customerAddress2Col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress2()));
@@ -291,7 +321,8 @@ public class MainScreenController implements Initializable {
             customerPostalCodeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPostalCode()));
             customerCountryCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCountry()));
             customerPhoneCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPhone()));
-         
+            customerActiveCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getActive()).asObject());
+            
         } catch (SQLException ex) {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

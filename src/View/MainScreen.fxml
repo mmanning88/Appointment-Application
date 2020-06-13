@@ -27,7 +27,7 @@
             </HBox>
             <HBox prefHeight="549.0" prefWidth="1000.0" spacing="5.0">
                <children>
-                  <VBox prefHeight="453.0" prefWidth="270.0">
+                  <VBox prefHeight="539.0" prefWidth="220.0">
                      <children>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                            <children>
@@ -47,7 +47,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                        <VBox alignment="CENTER" prefHeight="180.0" prefWidth="249.0" spacing="5.0">
                            <children>
                               <Label text="Appointment Actions" />
                               <HBox alignment="TOP_CENTER" prefHeight="66.0" prefWidth="242.0" spacing="20.0">
@@ -75,9 +75,9 @@
                            </padding>
                         </VBox>
                      </children></VBox>
-                  <VBox prefHeight="509.0" prefWidth="701.0">
+                  <VBox prefHeight="539.0" prefWidth="712.0">
                      <children>
-                        <TabPane prefHeight="496.0" prefWidth="701.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="538.0" prefWidth="712.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Weekly">
                               <content>
@@ -97,13 +97,18 @@
                                           </TableView>
                                           <HBox layoutY="414.0" prefHeight="53.0" prefWidth="701.0" spacing="5.0">
                                              <children>
-                                                <TextArea fx:id="descriptionTxtAreaWeekly" minWidth="200.0" prefHeight="53.0" prefWidth="450.0" />
+                                                <TextArea fx:id="descriptionTxtAreaWeekly" minWidth="200.0" prefHeight="33.0" prefWidth="450.0" />
                                                 <Button mnemonicParsing="false" onAction="#onActionPreviousWeek" prefWidth="100.0" text="Previous Week" />
                                                 <Button mnemonicParsing="false" onAction="#onActionNextWeek" prefWidth="100.0" text="Next Week" />
                                              </children>
                                              <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER" layoutX="35.0" layoutY="463.0" prefHeight="46.0" prefWidth="623.0">
+                                             <children>
+                                                <Label fx:id="currentWeek" text="Current Week" />
+                                             </children>
                                           </HBox>
                                        </children>
                                        <padding>
@@ -138,6 +143,11 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
                                           </HBox>
+                                          <HBox alignment="CENTER" layoutX="45.0" layoutY="464.0" prefHeight="46.0" prefWidth="623.0">
+                                             <children>
+                                                <Label fx:id="currentMonth" text="Current Month" />
+                                             </children>
+                                          </HBox>
                                        </children>
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -147,18 +157,19 @@
                             </Tab>
                               <Tab text="Customers">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="467.0" prefWidth="736.0">
                                        <children>
-                                          <TableView fx:id="customerTableView" prefHeight="446.0" prefWidth="663.0">
+                                          <TableView fx:id="customerTableView" prefHeight="446.0" prefWidth="712.0">
                                              <columns>
                                                 <TableColumn fx:id="customerIdCol" prefWidth="41.0" text="ID" />
                                                 <TableColumn fx:id="customerNameCol" prefWidth="126.0" text="Name" />
-                                                <TableColumn fx:id="customerAddressCol" prefWidth="137.0" text="Address" />
-                                                <TableColumn fx:id="customerAddress2Col" text="Address2" />
-                                                <TableColumn fx:id="customerCityCol" prefWidth="53.0" text="City" />
-                                                <TableColumn fx:id="customerPostalCodeCol" prefWidth="77.0" text="Postal Code" />
-                                                <TableColumn fx:id="customerCountryCol" prefWidth="52.0" text="Country" />
-                                                <TableColumn fx:id="customerPhoneCol" prefWidth="95.0" text="Phone" />
+                                                <TableColumn fx:id="customerAddressCol" prefWidth="130.0" text="Address" />
+                                                <TableColumn fx:id="customerAddress2Col" prefWidth="64.0" text="Address2" />
+                                                <TableColumn fx:id="customerCityCol" prefWidth="62.0" text="City" />
+                                                <TableColumn fx:id="customerPostalCodeCol" prefWidth="72.0" text="Postal Code" />
+                                                <TableColumn fx:id="customerCountryCol" prefWidth="71.0" text="Country" />
+                                                <TableColumn fx:id="customerPhoneCol" prefWidth="101.0" text="Phone" />
+                                                <TableColumn fx:id="customerActiveCol" prefWidth="41.0" text="Active" />
                                              </columns>
                                           </TableView>
                                        </children>
