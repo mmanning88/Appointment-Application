@@ -78,19 +78,20 @@ public class CustomerDAO {
                 CityDAO.addDBCity(customer.getAddress(), conn);
             }
             
-            // Update address
+            // Update customer address
             updateDBCustomerAddress(customer, conn);
-            String updateCustomer = "UPDATE customer SET customerName = ?, active = ?, lastUpdate = ?, lastUpdateBy = ?,   WHERE customerID = ?";
-            DBQuery.setPreparedStatement(conn, updateCustomer);
-            PreparedStatement ps = DBQuery.getPreparedStatement();
             
-            // 1 = active/true 0 = inactive/false
-            ps.setString(1, customer.getCustomerName());
-            ps.setInt(2, customer.getActive()); 
-            ps.setString(3, User.currentUser.getUserName());
-            ps.setString(4, DateTimeFormat.getCurrentUTC());
-            ps.setInt(5, customer.getCustomerId());
-            ps.execute();
+            // Update customer
+            String updateCustomer = "UPDATE customer SET customerName = ?, active = ?, lastUpdate = ?, lastUpdateBy = ? WHERE customerId = ?";
+            DBQuery.setPreparedStatement(conn, updateCustomer);
+            PreparedStatement ps2 = DBQuery.getPreparedStatement();
+            
+            ps2.setString(1, customer.getCustomerName());
+            ps2.setInt(2, customer.getActive()); 
+            ps2.setString(3, DateTimeFormat.getNow());
+            ps2.setString(4, User.currentUser.getUserName());
+            ps2.setInt(5, customer.getCustomerId());
+            ps2.execute();
             
             DBConnection.closeConnection();
         }

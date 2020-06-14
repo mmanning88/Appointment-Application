@@ -387,7 +387,8 @@ public class MainScreenController implements Initializable {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
         appointmentListener();
-        alertAppointment();
+        alertAppointment(); 
+        
     }    
     
 }

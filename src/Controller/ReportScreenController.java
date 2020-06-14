@@ -1,9 +1,18 @@
 
 package Controller;
 
+import Model.Appointment;
+import Model.AppointmentList;
+import Model.Report.ReportCityAppointments;
+import Model.Report.Report;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -12,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 /*
 @author Matthew Manning
@@ -29,10 +39,15 @@ public class ReportScreenController implements Initializable {
 
     @FXML
     private RadioButton appointmentByCityRB;
+        
+    @FXML
+    private TextArea reportTxtArea;
 
     @FXML
     void onActionAppointmentByCity(ActionEvent event) {
-        
+
+        ReportCityAppointments report = new ReportCityAppointments();
+        reportTxtArea.setText(report.collectAndDisplay());
     }
     
     @FXML
@@ -44,6 +59,7 @@ public class ReportScreenController implements Initializable {
     void onActionConsultantSchedule(ActionEvent event) {
 
     }
+    
 
     @FXML
     void onActionToMainScreen(ActionEvent event) throws IOException {
@@ -56,6 +72,7 @@ public class ReportScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
 
     }    
     

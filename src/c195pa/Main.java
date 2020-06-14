@@ -4,8 +4,11 @@ package c195pa;
 import DAO.CustomerDAO;
 import DAO.UserDAO;
 import Model.Address;
+import Model.Appointment;
+import Model.AppointmentList;
 import Model.Customer;
 import Model.CustomerList;
+import Model.Report.ReportCityAppointments;
 import Model.UserList;
 import Utilities.DateTimeFormat;
 import java.sql.SQLException;
@@ -17,6 +20,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -44,8 +48,14 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
         launch(args);
 
+
+        
         System.exit(0);
     }
+    
+
+   
+    
     
     
 }
