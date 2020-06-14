@@ -8,7 +8,7 @@ import Model.Appointment;
 import Model.AppointmentList;
 import Model.Customer;
 import Model.CustomerList;
-import Model.Report.ReportCityAppointments;
+import Model.Report.CityAppointments;
 import Model.UserList;
 import Utilities.DateTimeFormat;
 import java.sql.SQLException;
@@ -47,7 +47,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         launch(args);
-
 
         
         System.exit(0);

@@ -8,26 +8,14 @@ import java.util.stream.Collectors;
 import javafx.collections.ObservableList;
 
 /**
- *
  * @author Matthew Manning
  */
-public class ReportAppointmentByMonths extends Report implements Reportable{
+public class AppointmentByMonths extends Report implements Reportable{
     
-    public ReportAppointmentByMonths() {
+    public AppointmentByMonths() {
         this.reportTitle = "Number of Appointments by Month, report generated " + LocalDate.now();
     }
-    
-    
-    
-//    @Test
-//public void whenCollectorsJoining_thenPrintCustom() {
-//    List<Integer> intList = Arrays.asList(1, 2, 3);
-//    String result = intList.stream()
-//      .map(n -> String.valueOf(n))
-//      .collect(Collectors.joining("-", "{", "}"));
-//  
-//    System.out.println(result);
-//}
+
     
     
     public void setContent() {

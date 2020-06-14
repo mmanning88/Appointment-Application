@@ -1,10 +1,14 @@
 
 package Utilities;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Locale;
 
 //    LocalDateTime now = LocalDateTime.now();
 //    System.out.println("Before : " + now);
@@ -20,7 +24,7 @@ public class DateTimeFormat {
     public static DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH");
     public static DateTimeFormatter formatterMinute = DateTimeFormatter.ofPattern("mm");
     public static DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
+    
     public static LocalDateTime getCurrentLDT() {
         LocalDateTime ldt = LocalDateTime.parse(getNow(), formatter);
         return ldt;
@@ -43,7 +47,16 @@ public class DateTimeFormat {
         String nowFormat = now.format(formatter);
         return nowFormat;
     }
-
-
     
+    public static String dateToMonth(LocalDate date) {
+        String month = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        return month;
+    }
+    
+    public static String dateToWeek(LocalDate date) {
+        String firstDate = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).format(formatterDate);
+        String lastDate = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)).format(formatterDate);
+        return firstDate + " through " + lastDate;
+    }
+
 }

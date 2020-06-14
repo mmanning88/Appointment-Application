@@ -3,7 +3,7 @@ package Controller;
 
 import Model.Appointment;
 import Model.AppointmentList;
-import Model.Report.ReportCityAppointments;
+import Model.Report.CityAppointments;
 import Model.Report.Report;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +46,7 @@ public class ReportScreenController implements Initializable {
     @FXML
     void onActionAppointmentByCity(ActionEvent event) {
 
-        ReportCityAppointments report = new ReportCityAppointments();
+        CityAppointments report = new CityAppointments();
         reportTxtArea.setText(report.collectAndDisplay());
     }
     

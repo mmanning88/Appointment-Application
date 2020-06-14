@@ -14,9 +14,9 @@ import javafx.collections.ObservableList;
  *
  * @author Matthew Manning
  */
-public class ReportConsultantSchedule extends Report implements Reportable{
+public class ConsultantSchedule extends Report implements Reportable{
 
-    public ReportConsultantSchedule() {
+    public ConsultantSchedule() {
         this.reportTitle = "Consultant Appointment Schedule, report generated " + LocalDate.now();
     }
 

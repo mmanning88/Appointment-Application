@@ -9,17 +9,19 @@ import Model.AppointmentList;
 import Model.Customer;
 import Model.CustomerList;
 import Model.UserList;
+import Utilities.DateTimeFormat;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -35,7 +37,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 /*
 @author Matthew Manning
@@ -140,7 +141,11 @@ public class MainScreenController implements Initializable {
     
     @FXML
     private Label currentWeek, currentMonth;
-
+    
+    private final ZoneId localTZ = ZoneId.of(TimeZone.getDefault().getID());
+    private LocalDate currentDateMonthly;
+    private LocalDate currentDateWeekly;
+    
     @FXML
     void onActionDeleteAppointment(ActionEvent event) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -273,31 +278,39 @@ public class MainScreenController implements Initializable {
     // D.   Provide the ability to view the calendar by month and by week.
     @FXML
     void onActionNextMonth(ActionEvent event) {
-
+        currentDateMonthly = currentDateMonthly.plusMonths(1);
+        currentMonth.setText(DateTimeFormat.dateToMonth(currentDateMonthly));
+        populateMonthlyTable();
+    }
+    
+    @FXML
+    void onActionPreviousMonth(ActionEvent event) {
+        currentDateMonthly = currentDateMonthly.plusMonths(-1);
+        currentMonth.setText(DateTimeFormat.dateToMonth(currentDateMonthly));
+        populateMonthlyTable();
     }
 
     @FXML
     void onActionNextWeek(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionPreviousMonth(ActionEvent event) {
-
+        currentDateWeekly = currentDateWeekly.plusWeeks(1);
+        currentWeek.setText(DateTimeFormat.dateToWeek(currentDateWeekly));
+        populateWeeklyTable();
     }
 
     @FXML
     void onActionPreviousWeek(ActionEvent event) {
-
+        currentDateWeekly = currentDateWeekly.plusWeeks(-1);
+        currentWeek.setText(DateTimeFormat.dateToWeek(currentDateWeekly));
+        populateWeeklyTable();
     }
-    
-    // Check is any appointment is within 15 minutes of starting
+
+    // Check is any same day appointment is within 15 minutes of starting
     private void alertAppointment() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        LocalTime currentTime = LocalTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         long interval;
         for (Appointment appointment : AppointmentList.weeklyAppointments) {
-            LocalTime startTime = appointment.getStart().toLocalTime();
+            LocalDateTime startTime = appointment.getStart().toLocalDateTime();
             interval = ChronoUnit.MINUTES.between(currentTime, startTime);
             if (interval > 0 && interval <= 15) {
                 alert.setTitle("Upcoming appointment(s)");
@@ -327,15 +340,27 @@ public class MainScreenController implements Initializable {
             }
         });
     }
+    
+    private void populateMonthlyTable() {
+        AppointmentList.sortByCurrentMonth(currentDateMonthly);
+        calenderMonthlyView.setItems(AppointmentList.monthlyAppointments);
+    }
+    
+    private void populateWeeklyTable() {
+        AppointmentList.sortByCurrentWeek(currentDateWeekly);
+        calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        currentDateMonthly = LocalDate.now(localTZ);
+        currentMonth.setText(DateTimeFormat.dateToMonth(currentDateMonthly));
+        currentDateWeekly = LocalDate.now(localTZ);
+        currentWeek.setText(DateTimeFormat.dateToWeek(currentDateWeekly));
         descriptionTxtAreaWeekly.setEditable(false);
-        descriptionTxtAreaMonthly.setEditable(false);
-        
-        // Alert reminder set to non-editable to user can not edit in GUI
+        descriptionTxtAreaMonthly.setEditable(false);       
         appointmentAlertTxt.setEditable(false);
+        
         try {
             UserList.userList = UserDAO.getAllDBUsers();
         } catch (SQLException ex) {
@@ -344,48 +369,49 @@ public class MainScreenController implements Initializable {
 
         // TableViews for customer, weekly appointments and monthly appointments populated
         try {
-            AppointmentList.weeklyAppointments = AppointmentDAO.getAllAppointmentsDB();
-            AppointmentList.monthlyAppointments = AppointmentList.weeklyAppointments;
-            calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
-            
+            AppointmentList.allAppointments = AppointmentDAO.getAllAppointmentsDB();
+            AppointmentList.weeklyAppointments.addAll(AppointmentList.allAppointments);
             CustomerList.customerList = CustomerDAO.getAllDBCustomers();
-            
-            
-            weeklyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
-            weeklyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
-            weeklyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
-            weeklyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
-            weeklyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
-            weeklyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
-            weeklyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
-            weeklyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
-            
-            calenderMonthlyView.setItems(AppointmentList.monthlyAppointments);
-            
-            monthlyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
-            monthlyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
-            monthlyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
-            monthlyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
-            monthlyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
-            monthlyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
-            monthlyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
-            monthlyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
-            
-            customerTableView.setItems(CustomerList.customerList);
-            
-            customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());
-            customerNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerName()));
-            customerAddressCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress()));
-            customerAddress2Col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress2()));
-            customerCityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity()));
-            customerPostalCodeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPostalCode()));
-            customerCountryCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCountry()));
-            customerPhoneCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPhone()));
-            customerActiveCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getActive()).asObject());
-            
         } catch (SQLException ex) {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        populateWeeklyTable();
+        calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
+
+        weeklyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
+        weeklyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
+        weeklyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        weeklyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
+        weeklyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
+        weeklyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
+        weeklyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
+        weeklyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
+
+        populateMonthlyTable();
+        calenderMonthlyView.setItems(AppointmentList.monthlyAppointments);
+
+        monthlyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());
+        monthlyCustomerCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustomerName()));
+        monthlyTitleCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        monthlyTypeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
+        monthlyLocationCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
+        monthlyContactCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
+        monthlyStartTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeStartString()));
+        monthlyEndTimeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTimeEndString()));
+
+        customerTableView.setItems(CustomerList.customerList);
+
+        customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());
+        customerNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerName()));
+        customerAddressCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress()));
+        customerAddress2Col.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress2()));
+        customerCityCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity()));
+        customerPostalCodeCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPostalCode()));
+        customerCountryCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCountry()));
+        customerPhoneCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPhone()));
+        customerActiveCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getActive()).asObject());
+            
         appointmentListener();
         alertAppointment(); 
         

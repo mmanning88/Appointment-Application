@@ -71,7 +71,7 @@ public class LoginScreenController implements Initializable {
                 stage.setScene(new Scene(scene));
                 stage.show();
             } 
-        } catch (NullPointerException nullPointerException) {
+        } catch (NullPointerException e) {
             loginInstructionLbl.setText(rb.getString("loginError"));
         }
         
@@ -100,13 +100,11 @@ public class LoginScreenController implements Initializable {
         User user = UserDAO.getDBUser(getUsername());
         return user;
 
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setLanguage();
-        
         System.out.println(UserList.getUserList());
     }    
     

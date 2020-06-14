@@ -19,10 +19,10 @@ import javafx.collections.ObservableList;
  *
  * @author Matthew Manning
  */
-public class ReportCityAppointments extends Report implements Reportable {
+public class CityAppointments extends Report implements Reportable {
     
 
-    public ReportCityAppointments() {
+    public CityAppointments() {
         this.reportTitle = "Number of Appointments per City, report generated " + LocalDate.now();
     }
     
