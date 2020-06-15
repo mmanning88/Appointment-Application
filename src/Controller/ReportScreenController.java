@@ -1,6 +1,7 @@
 
 package Controller;
 
+import Model.Report.AppointmentByMonths;
 import Model.Report.CityAppointments;
 import Model.Report.ConsultantSchedule;
 import java.io.IOException;
@@ -43,20 +44,20 @@ public class ReportScreenController implements Initializable {
 
     @FXML
     void onActionAppointmentByCity(ActionEvent event) {
-
-        CityAppointments report = new CityAppointments();
-        reportTxtArea.setText(report.collectAndDisplay());
+        CityAppointments cityReport = new CityAppointments();
+        reportTxtArea.setText(cityReport.collectAndDisplay());
     }
     
     @FXML
     void onActionAppointmentTypesByMonth(ActionEvent event) {
-
+        AppointmentByMonths monthTypeReport = new AppointmentByMonths();
+        reportTxtArea.setText(monthTypeReport.collectAndDisplay());
     }
 
     @FXML
     void onActionConsultantSchedule(ActionEvent event) {
-        ConsultantSchedule report = new ConsultantSchedule();
-        reportTxtArea.setText(report.collectAndDisplay());
+        ConsultantSchedule consultantReport = new ConsultantSchedule();
+        reportTxtArea.setText(consultantReport.collectAndDisplay());
     }
     
 
