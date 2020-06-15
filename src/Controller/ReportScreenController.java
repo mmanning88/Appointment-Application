@@ -1,18 +1,11 @@
 
 package Controller;
 
-import Model.Appointment;
-import Model.AppointmentList;
 import Model.Report.CityAppointments;
-import Model.Report.Report;
+import Model.Report.ConsultantSchedule;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.Set;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -24,8 +17,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 /*
-@author Matthew Manning
+* @author Matthew Manning
+*I.  Provide the ability to generate each  of the following reports:
+* - number of appointment types by month
+* - the schedule for each consultant
+* - one additional report of your choice
 */
+
 public class ReportScreenController implements Initializable {
     
     Stage stage;
@@ -57,7 +55,8 @@ public class ReportScreenController implements Initializable {
 
     @FXML
     void onActionConsultantSchedule(ActionEvent event) {
-
+        ConsultantSchedule report = new ConsultantSchedule();
+        reportTxtArea.setText(report.collectAndDisplay());
     }
     
 

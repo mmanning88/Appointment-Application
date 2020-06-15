@@ -26,6 +26,7 @@ public class CityAppointments extends Report implements Reportable {
         this.reportTitle = "Number of Appointments per City, report generated " + LocalDate.now();
     }
     
+    // Inner class to create city objects for cityList
     private class City {
         private final String name;
         private int count;
@@ -55,7 +56,7 @@ public class CityAppointments extends Report implements Reportable {
     public ArrayList setContent() {
         ArrayList<City> cityList = new ArrayList<>();
         
-        for (Appointment appointment : AppointmentList.monthlyAppointments) {
+        for (Appointment appointment : AppointmentList.allAppointments) {
             int indexToCheck = checkCity(cityList, appointment.getCustomer().getAddress().getCity());
             if (indexToCheck < 0) {
                 City newCity = new City(appointment.getCustomer().getAddress().getCity());
@@ -82,7 +83,7 @@ public class CityAppointments extends Report implements Reportable {
     }
     
 
-    
+    // Creates formatted string of report data
     @Override
     public String collectAndDisplay() {
         ArrayList<City> data = setContent();

@@ -35,12 +35,14 @@ public class AppointmentList {
         return monthlyAppointments;
     }
     
-    public static void addToAppointmentList(Appointment appointment) {       
+    public static void addToAppointmentList(Appointment appointment) {   
+        allAppointments.add(appointment);
         weeklyAppointments.add(appointment);
         monthlyAppointments.add(appointment);     
     }
     
     public static void deleteFromAppointmentList(Appointment appointment) {
+        allAppointments.remove(appointment);
         weeklyAppointments.remove(appointment);
         monthlyAppointments.remove(appointment);
     }
@@ -48,6 +50,7 @@ public class AppointmentList {
     public static void updateAppointmentList(int index, Appointment appointment) {
         weeklyAppointments.set(index, appointment);
         monthlyAppointments.set(index, appointment);
+        allAppointments.set(index, appointment);
     }
     
     public static Appointment searchAppointmentList(int appointmentId) {

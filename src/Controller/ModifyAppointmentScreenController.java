@@ -191,7 +191,7 @@ public class ModifyAppointmentScreenController implements Initializable {
         
         // Check for overlapping appointments
         //(StartA < EndB) and (EndA > StartB) = overlap)
-        for (Appointment appointment : AppointmentList.getMonthlyAppointments()) {
+        for (Appointment appointment : AppointmentList.allAppointments) {
             if (appointment.getAppointmentId() != appointmentId ) {
                 if (startLocalTime.isBefore(appointment.getEnd()) && endLocalTime.isAfter(appointment.getStart())) {
                     alert.setTitle("Time Error");

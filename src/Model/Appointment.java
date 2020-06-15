@@ -1,28 +1,14 @@
 
 package Model;
 
-// Example constructor
-
-import Utilities.DateTimeFormat;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.TimeZone;
 
-//        Appointment testAppointment = new Appointment.AppointmentBuilder(99, 5, 2, testCustomer, "Test Title", "Test Type")
-//                .setContact("Test Contact")
-//                .setDescription("Test Description")
-//                .setLocation("Test Location").build();
 
 /*
 @author Matthew Manning
 */
-public class Appointment {
+public class Appointment implements Comparable<Appointment>{
 
     private final int appointmentId;
     private final int customerId;
@@ -35,6 +21,11 @@ public class Appointment {
     private final String description; //Optional
     private final String location; //Optional
     private final String contact; //Optional
+
+    @Override
+    public int compareTo(Appointment appointment) {
+        return getStart().toLocalDateTime().compareTo(appointment.getStart().toLocalDateTime());
+    }
     
     // Builder pattern handles optional parameters
     public static class AppointmentBuilder {
@@ -158,32 +149,5 @@ public class Appointment {
         String dateTime = date + " " + time;
         return dateTime;
     }
-    
-    
-//            LocalDate parisDate = LocalDate.of(2019, 5, 28);
-//        LocalTime parisTime = LocalTime.of(02, 00);
-//        ZoneId parisZoneId = ZoneId.of("Europe/Paris");
-//        ZonedDateTime parisZDT = ZonedDateTime.of(parisDate, parisTime, parisZoneId);
-//        ZoneId localZoneId = ZoneId.of(TimeZone.getDefault().getID());
-//        
-//        Instant parisToGMTInstant = parisZDT.toInstant();
-//        ZonedDateTime parisToLocalZDT = parisZDT.withZoneSameInstant(localZoneId);
-//        ZonedDateTime gmtToLocalZDT = parisToGMTInstant.atZone(localZoneId);
-//        
-//        System.out.println("Local: " + ZonedDateTime.now());
-//        System.out.println("Paris: " + parisZDT);
-//        System.out.println("Paris->GMT: " + parisToGMTInstant);
-//        System.out.println("GMT->Local: " + gmtToLocalZDT);
-//        System.out.println("GMT->LocaleDate: " + gmtToLocalZDT.toLocalDate());
-//        System.out.println("GMT->LocaleTime: " + gmtToLocalZDT.toLocalTime());
-//        
-//        String date = String.valueOf(gmtToLocalZDT.toLocalDate());
-//        String time = String.valueOf(gmtToLocalZDT.toLocalTime());
-//        String dateTime = date + " " + time;
-//        System.out.println(dateTime); //MySql insertion format
-
-
-    
-    
-    
+        
 }
