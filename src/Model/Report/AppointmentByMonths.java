@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
 /**
  * @author Matthew Manning
  */
+
 public class AppointmentByMonths extends Report implements Reportable{
     
     public AppointmentByMonths() {

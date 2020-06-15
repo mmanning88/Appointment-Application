@@ -101,6 +101,12 @@ public class LoginScreenController implements Initializable {
         return user;
 
     }
+    
+    private void userLoginWrite() {
+        
+        
+        // close writer when finished
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

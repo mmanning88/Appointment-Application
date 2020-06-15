@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -154,7 +156,9 @@ public class MainScreenController implements Initializable {
         
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            Appointment appointment = calenderWeeklyView.getSelectionModel().getSelectedItem();
+            Appointment appointmentMonth = calenderMonthlyView.getSelectionModel().getSelectedItem();
+            Appointment appointmentWeek = calenderWeeklyView.getSelectionModel().getSelectedItem();
+            Appointment appointment = validateAppointmentSelection(appointmentWeek, appointmentMonth);
             AppointmentDAO.deleteAppointmentDB(appointment.getAppointmentId());
             AppointmentList.deleteFromAppointmentList(appointment);
         }
@@ -208,22 +212,7 @@ public class MainScreenController implements Initializable {
         
     }
     
-    public Appointment validateAppointmentSelection(Appointment weeklyAppointment, Appointment monthlyAppointment) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        if (monthlyAppointment != weeklyAppointment && monthlyAppointment != null && weeklyAppointment != null) {
-            alert.setTitle("Warning Dialog");
-            alert.setContentText("Please select one appointment before modifying.");
-            alert.showAndWait();
-            return null;
-        } else if (monthlyAppointment == null && weeklyAppointment == null) {
-            alert.setTitle("Warning Dialog");
-            alert.setContentText("Please select one appointment before modifying.");
-            alert.showAndWait();
-            return null;
-        }
-        
-        return weeklyAppointment;
-    }
+
 
     @FXML
     void onActionToReports(ActionEvent event) throws IOException {
@@ -254,17 +243,29 @@ public class MainScreenController implements Initializable {
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Delete Customer Confirmation");
-        alert.setContentText("Are you sure?");
+        alert.setContentText("This will delete all appointments with customer");
         
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            // DAO action must be performed first, uses CustomerList to find address
             Customer customer = customerTableView.getSelectionModel().getSelectedItem();
+            ArrayList<Appointment> appointmentsToDelete = new ArrayList<>();
+            // Appointment ID foreign key in Customer, need to delete appointments after deleting customer
+            for (Iterator<Appointment> iterator = AppointmentList.allAppointments.iterator(); iterator.hasNext();) {
+                Appointment appointment = iterator.next();
+                if (appointment.getCustomer().getCustomerId() == customer.getCustomerId()) {
+                    AppointmentDAO.deleteAppointmentDB(appointment.getAppointmentId());
+                    appointmentsToDelete.add(appointment);
+                }
+            }
+            AppointmentList.allAppointments.removeAll(appointmentsToDelete);
+
+            // DAO action must be performed first, uses CustomerList to find address
             CustomerDAO.deleteDBCustomer(customer.getCustomerId());
             CustomerList.deleteFromCustomerList(customer);
+            populateMonthlyTable();
+            populateWeeklyTable();
+            
         }
-
-        
 
     }
 
@@ -303,6 +304,26 @@ public class MainScreenController implements Initializable {
         currentWeek.setText(DateTimeFormat.dateToWeek(currentDateWeekly));
         populateWeeklyTable();
     }
+    
+    private Appointment validateAppointmentSelection(Appointment weeklyAppointment, Appointment monthlyAppointment) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (monthlyAppointment != weeklyAppointment && monthlyAppointment != null && weeklyAppointment != null) {
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select one appointment before modifying.");
+            alert.showAndWait();
+            return null;
+        } else if (monthlyAppointment == null && weeklyAppointment == null) {
+            alert.setTitle("Warning Dialog");
+            alert.setContentText("Please select one appointment before modifying.");
+            alert.showAndWait();
+            return null;
+        } else if (monthlyAppointment != null && weeklyAppointment == null) {
+            return monthlyAppointment;
+        } else if (monthlyAppointment == null && weeklyAppointment != null) {
+            return weeklyAppointment;
+        }        
+        return null;
+    }
 
     // Check is any same day appointment is within 15 minutes of starting
     private void alertAppointment() {
@@ -332,7 +353,6 @@ public class MainScreenController implements Initializable {
                 descriptionTxtAreaWeekly.setText(newAppointment.getDescription());
             }
         });
-
         calenderMonthlyView.getSelectionModel().selectedItemProperty().addListener((obs, oldAppointment, newAppointment) -> {
             if (newAppointment != null) {
                 calenderWeeklyView.getSelectionModel().clearSelection();
@@ -370,7 +390,6 @@ public class MainScreenController implements Initializable {
         // TableViews for customer, weekly appointments and monthly appointments populated
         try {
             AppointmentList.allAppointments = AppointmentDAO.getAllAppointmentsDB();
-            AppointmentList.weeklyAppointments.addAll(AppointmentList.allAppointments);
             CustomerList.customerList = CustomerDAO.getAllDBCustomers();
         } catch (SQLException ex) {
             Logger.getLogger(MainScreenController.class.getName()).log(Level.SEVERE, null, ex);

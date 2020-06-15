@@ -138,7 +138,7 @@ public class AddAppointmentScreenController implements Initializable {
             // Exception control for improper minute ad hour entry
         } catch (DateTimeException eDate) {
             Alert alertTime = new Alert(Alert.AlertType.ERROR);
-            alertTime.setTitle("Customer Error");
+            alertTime.setTitle("Appointment Error");
             alertTime.setContentText(eDate.getMessage());
             alertTime.showAndWait();
             return;
@@ -150,6 +150,20 @@ public class AddAppointmentScreenController implements Initializable {
             end = LocalDateTime.parse(ld + " " + endTime + ":00", DateTimeFormat.formatter);
         } catch (DateTimeParseException e) {
             System.out.println(e.getMessage());
+        }
+        
+        if (start.equals(end) ) {
+            Alert alertTime = new Alert(Alert.AlertType.ERROR);
+            alertTime.setTitle("Time Error");
+            alertTime.setContentText("Time must not be the same");
+            alertTime.showAndWait();
+            return;
+        } else if (start.isAfter(end)) {
+            Alert alertTime = new Alert(Alert.AlertType.ERROR);
+            alertTime.setTitle("Time Error");
+            alertTime.setContentText("Start time must be before end time");
+            alertTime.showAndWait();
+            return;
         }
 
         
