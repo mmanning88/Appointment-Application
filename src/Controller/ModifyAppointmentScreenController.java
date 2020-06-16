@@ -287,6 +287,7 @@ public class ModifyAppointmentScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        // Lambda expression uses listener interface and overrides abstract method without having to create a new listener
         customerTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> 
         {
             if (newVal != null) {

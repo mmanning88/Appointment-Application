@@ -23,13 +23,11 @@ public class DBConnection {
         try {
             Class.forName(MYSQLJDBCDriver);
             conn = (Connection) DriverManager.getConnection(jdbcURL, username, password);
-            System.out.println("Connection successful");
-            
+            System.out.println("Connection successful");  
         } catch (ClassNotFoundException | SQLException ex) {
-            //Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
         }
-        //Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+
         
         return conn;
     }

@@ -15,8 +15,6 @@ public abstract class Report {
         this.reportTitle = reportTitle;
         this.content = content;
     }
-    
-    
 
     public Report() {
 
@@ -28,10 +26,6 @@ public abstract class Report {
 
     public void setReportTitle(String reportTitle) {
         this.reportTitle = reportTitle;
-    }
-
-    private String getContent() {
-        return content;
     }
 
     public ArrayList setContent() {

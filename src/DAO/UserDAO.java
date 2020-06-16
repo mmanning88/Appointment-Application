@@ -2,7 +2,6 @@
 package DAO;
 
 import Model.User;
-import Model.UserList;
 import Utilities.DBConnection;
 import Utilities.DBQuery;
 import java.sql.Connection;

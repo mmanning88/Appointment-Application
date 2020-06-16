@@ -346,6 +346,7 @@ public class MainScreenController implements Initializable {
     }
     
     // Create listener so only one appointment can be selected at a time
+    // Lambda expression uses listener interface and overrides abstract method without having to create a new listener
     private void appointmentListener() {
         calenderWeeklyView.getSelectionModel().selectedItemProperty().addListener((obs, oldAppointment, newAppointment) -> {
             if (newAppointment != null) {
@@ -397,7 +398,7 @@ public class MainScreenController implements Initializable {
         
         populateWeeklyTable();
         /* All TableViews populated using lambda expressions. 
-        *  This allows parallel execution of operations, tables populated with higher effieciency.
+        *  This allows parallel execution of operations, tables populated with higher efficiency
         */
         calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
 

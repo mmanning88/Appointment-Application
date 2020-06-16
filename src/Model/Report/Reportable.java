@@ -1,13 +1,9 @@
 
 package Model.Report;
 
-import java.util.ArrayList;
-
-
-//Insure report classes have same method to collect data for report and display in controller
+// All reports must return a string with formatted report data
 public interface Reportable {
     
     public String collectAndDisplay();
-    
-    
+        
 }
