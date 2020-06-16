@@ -277,6 +277,10 @@ public class AddAppointmentScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         fillTypeCB();
+        startTimeHourTxt.setPromptText("9");
+        startTimeMinuteTxt.setPromptText("00");
+        endTimeHourTxt.setPromptText("18");
+        endTimeMinuteTxt.setPromptText("00");
         
         // Lambda expression uses listener interface and overrides abstract method without having to create a new listener
         customerTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> 
