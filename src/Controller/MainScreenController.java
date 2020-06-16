@@ -150,7 +150,7 @@ public class MainScreenController implements Initializable {
     
     @FXML
     void onActionDeleteAppointment(ActionEvent event) throws SQLException {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Appointment Confirmation");
         alert.setContentText("Are you sure?");
         
@@ -241,7 +241,7 @@ public class MainScreenController implements Initializable {
     @FXML
     void onActionDeleteCustomer(ActionEvent event) throws SQLException {
 
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Customer Confirmation");
         alert.setContentText("This will delete all appointments with customer");
         

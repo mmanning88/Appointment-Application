@@ -103,8 +103,9 @@ public class AddAppointmentScreenController implements Initializable {
     private DatePicker startDatePicker;
     
     @FXML
-    private TextField endTimeTxt, startTimeTxt;
+    private TextField startTimeHourTxt, startTimeMinuteTxt, endTimeHourTxt, endTimeMinuteTxt;
     
+    //Holds next appointment ID
     private int apptIdStatic;
 
 
@@ -113,12 +114,25 @@ public class AddAppointmentScreenController implements Initializable {
         
         int appointmentId = apptIdStatic;
         int customerId = 0;
+        
         try {
             customerId = Integer.parseInt(customerIdTxt.getText());
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+            Alert alertTime = new Alert(Alert.AlertType.ERROR);
+            alertTime.setTitle("Appointment Error");
+            alertTime.setContentText("Customer rmust be selected");
+            alertTime.showAndWait();
+            return;
         }
         Customer customer = CustomerList.searchCustomerList(customerId);
+        if (customer.getActive() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointment Error");
+            alert.setContentText("Customer must be active");
+            alert.showAndWait();
+            return;
+        }
+        
         User user = User.currentUser;
         String title = appointmentTitleTxt.getText();
         String type = typeCombo.getValue();
@@ -127,15 +141,32 @@ public class AddAppointmentScreenController implements Initializable {
         LocalTime endTime = null;
         try {
             ld = startDatePicker.getValue();
-            startTime = LocalTime.parse(startTimeTxt.getText(), DateTimeFormat.formatterTime);
-            endTime = LocalTime.parse(endTimeTxt.getText(), DateTimeFormat.formatterTime);
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
-            // Exception control for improper minute ad hour entry
-        } catch (DateTimeException eDate) {
+            Alert alertTime = new Alert(Alert.AlertType.ERROR);
+            if (ld == null) {
+                alertTime.setTitle("Appointment Date Error");
+                alertTime.setContentText("Date must be provided");
+                alertTime.showAndWait();
+                return;
+            }
+            if (startTimeHourTxt.getText().isEmpty() || startTimeMinuteTxt.getText().isEmpty() || endTimeHourTxt.getText().isEmpty() || endTimeMinuteTxt.getText().isEmpty()) {
+                alertTime.setTitle("Appointment Time Error");
+                alertTime.setContentText("Start and end times must not be blank");
+                alertTime.showAndWait();
+                return;
+            }
+            //String.format("%03d" , number)
+            StringBuilder startBuilder = new StringBuilder();
+            StringBuilder endBuilder = new StringBuilder();
+            String startHour = String.format("%02d", Integer.valueOf(startTimeHourTxt.getText()));
+            String endHour = String.format("%02d", Integer.valueOf(endTimeHourTxt.getText()));
+            String startMinute = String.format("%02d", Integer.valueOf(startTimeMinuteTxt.getText()));
+            String endMinute = String.format("%02d", Integer.valueOf(endTimeMinuteTxt.getText()));            
+            startTime = LocalTime.parse(startBuilder.append(startHour).append(":").append(startMinute).toString());
+            endTime = LocalTime.parse(endBuilder.append(endHour).append(":").append(endMinute).toString());
+        } catch (DateTimeException eTime) {
             Alert alertTime = new Alert(Alert.AlertType.ERROR);
             alertTime.setTitle("Appointment Error");
-            alertTime.setContentText(eDate.getMessage());
+            alertTime.setContentText(eTime.getMessage());
             alertTime.showAndWait();
             return;
         }
@@ -147,46 +178,45 @@ public class AddAppointmentScreenController implements Initializable {
         } catch (DateTimeParseException e) {
             System.out.println(e.getMessage());
         }
-        
-        if (start.equals(end) ) {
-            Alert alertTime = new Alert(Alert.AlertType.ERROR);
-            alertTime.setTitle("Time Error");
-            alertTime.setContentText("Time must not be the same");
-            alertTime.showAndWait();
-            return;
-        } else if (start.isAfter(end)) {
-            Alert alertTime = new Alert(Alert.AlertType.ERROR);
-            alertTime.setTitle("Time Error");
-            alertTime.setContentText("Start time must be before end time");
-            alertTime.showAndWait();
-            return;
-        }
-
-        
+        // Business hours that appointments must be in range of
+        LocalTime businessStart = LocalTime.of(9, 00);
+        LocalTime businessEnd = LocalTime.of(18, 00);
+    
         String description = appointmentDescTxt.getText();
         String location = appointmentLocationTxt.getText();
         String contact = appointmentContactTxt.getText();
         
+        
         // Check to see if required fields have been filled out
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        if (customer == null) {
-            alert.setTitle("Customer Error");
-            alert.setContentText("Customer must be selected");
-            alert.showAndWait();
-            return;
-        } else if (ld == null || startTime == null || endTime == null) {
+        if (startTime == null || endTime == null) {
             alert.setTitle("Time Error");
             alert.setContentText("Appointment must have a start and end time");
             alert.showAndWait();
             return;
-        } else if (title.isEmpty()) {
+        } else if (title == null || title.isEmpty()) {
             alert.setTitle("Title Error");
             alert.setContentText("Appointment must have a title");
             alert.showAndWait();
             return;
-        } else if (type.isEmpty()) {
+        } else if (type == null) {
             alert.setTitle("Type Error");
             alert.setContentText("Appointment must have a type");
+            alert.showAndWait();
+            return;
+        } else if (start.equals(end) ) {
+            alert.setTitle("Time Error");
+            alert.setContentText("Time must not be the same");
+            alert.showAndWait();
+            return;
+        } else if (start.isAfter(end)) {
+            alert.setTitle("Time Error");
+            alert.setContentText("Start time must be before end time");
+            alert.showAndWait();
+            return;
+        } else if (start.toLocalTime().isBefore(businessStart) || end.toLocalTime().isAfter(businessEnd)) {
+            alert.setTitle("Time Error");
+            alert.setContentText("Appointment must be within business hours " + businessStart + " to " + businessEnd);
             alert.showAndWait();
             return;
         }

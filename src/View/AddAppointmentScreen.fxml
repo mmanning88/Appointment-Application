@@ -106,13 +106,15 @@
                         <TextField fx:id="appointmentContactTxt" maxWidth="200.0" minWidth="100.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                            <children>
-                              <TextField fx:id="startTimeTxt" prefHeight="25.0" prefWidth="63.0" />
+                              <TextField fx:id="startTimeHourTxt" prefHeight="25.0" prefWidth="40.0" />
+                              <TextField fx:id="startTimeMinuteTxt" prefWidth="40.0" />
                               <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="141.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                            <children>
-                              <TextField fx:id="endTimeTxt" prefHeight="25.0" prefWidth="63.0" />
+                              <TextField fx:id="endTimeHourTxt" prefHeight="25.0" prefWidth="40.0" />
+                              <TextField fx:id="endTimeMinuteTxt" prefWidth="40.0" />
                               <Label text="Valid times: 9:00 to 18:00" />
                            </children>
                         </HBox>

@@ -132,8 +132,6 @@ public class CustomerDAO {
             String addCustomer = "INSERT INTO customer VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                     
             // Execute insert with customer object
-
-
             DBQuery.setPreparedStatement(conn, addCustomer);
             PreparedStatement ps = DBQuery.getPreparedStatement();
             ps.setInt(1, customer.getCustomerId());
@@ -145,12 +143,6 @@ public class CustomerDAO {
             ps.setString(7, DateTimeFormat.getCurrentUTC());
             ps.setString(8, "admin");
             ps.execute();
-            
-            if (ps.getUpdateCount() > 0) {
-                System.out.println("Number of rows affects: " + ps.getUpdateCount());
-            } else {
-                System.out.println("No change");
-            }
             
             DBConnection.closeConnection();
         }

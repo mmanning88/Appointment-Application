@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class User {
     
     public static User currentUser;
-    private int userId;
+    private final int userId;
     private String userName, password, createdBy, lastUpdateBy;
     private LocalDateTime createDate, lastUpdate;
 
@@ -25,10 +25,6 @@ public class User {
 
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {

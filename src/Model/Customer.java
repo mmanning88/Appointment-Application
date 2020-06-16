@@ -7,12 +7,10 @@ package Model;
 public class Customer {
     
     // Customer property members
-    private int customerId;
+    private final int customerId;
     private int active;
     private String customerName;
 
-
-    
     // Address property members
     private Address address;
 
@@ -25,10 +23,6 @@ public class Customer {
 
     public int getCustomerId() {
         return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public int getActive() {

@@ -3,13 +3,8 @@ package Model;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
-import static java.time.temporal.TemporalQueries.zoneId;
 import java.util.Iterator;
-import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

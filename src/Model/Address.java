@@ -7,10 +7,10 @@ package Model;
 */
 public class Address {
     
-    private int addressId, cityId, countryId;
-    private String address, address2, postalCode, phone;
-    private String city;
-    private String country;
+    private final int addressId, cityId, countryId;
+    private final String address, address2, postalCode, phone;
+    private final String city;
+    private final String country;
 
     public Address(int addressId, int cityId, int countryId, String address, String address2, String postalCode, String phone, String city, String country) {
         this.addressId = addressId;
