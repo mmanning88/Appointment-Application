@@ -1,6 +1,8 @@
 
 package Model.Report;
 
+import java.util.ArrayList;
+
 /*
 @author Matthew Manning
 */
@@ -28,12 +30,12 @@ public abstract class Report {
         this.reportTitle = reportTitle;
     }
 
-    public String getContent() {
+    private String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public ArrayList setContent() {
+        return null;
     }
         
 }

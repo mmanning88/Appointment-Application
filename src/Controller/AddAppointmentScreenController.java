@@ -16,14 +16,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -272,6 +268,9 @@ public class AddAppointmentScreenController implements Initializable {
         appointmentIdTxt.setEditable(false);
         customerNameTxt.setEditable(false);
         
+        /* All TableViews populated using lambda expressions. 
+        *  This allows parallel execution of operations, tables populated with higher effieciency.
+        */
         customerTableView.setItems(CustomerList.customerList);
             
         customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());

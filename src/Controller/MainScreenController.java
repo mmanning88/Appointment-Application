@@ -396,6 +396,9 @@ public class MainScreenController implements Initializable {
         }
         
         populateWeeklyTable();
+        /* All TableViews populated using lambda expressions. 
+        *  This allows parallel execution of operations, tables populated with higher effieciency.
+        */
         calenderWeeklyView.setItems(AppointmentList.weeklyAppointments);
 
         weeklyIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAppointmentId()).asObject());

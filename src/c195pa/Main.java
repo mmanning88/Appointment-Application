@@ -11,6 +11,8 @@ import Model.CustomerList;
 import Model.Report.CityAppointments;
 import Model.UserList;
 import Utilities.DateTimeFormat;
+import Utilities.Logger;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -22,6 +24,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -47,8 +50,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         launch(args);
-
-        
         System.exit(0);
     }
     

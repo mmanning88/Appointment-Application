@@ -9,6 +9,7 @@ import Model.Appointment;
 import Model.AppointmentList;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class CityAppointments extends Report implements Reportable {
     }
 
 
-    
+    @Override
     public ArrayList setContent() {
         ArrayList<City> cityList = new ArrayList<>();
         
@@ -86,15 +87,16 @@ public class CityAppointments extends Report implements Reportable {
     // Creates formatted string of report data
     @Override
     public String collectAndDisplay() {
-        ArrayList<City> data = setContent();
+        Collection<City> data = setContent();
         StringBuilder builder = new StringBuilder();
         String titleString = this.reportTitle;
         String breakLine = "\n";
         
         builder.append(titleString).append(breakLine).append(breakLine);
-        for (City city : data) {
+        // Lambda function allows more concise way of showing iteration over a collection
+        data.forEach((city) -> {
             builder.append(city.getName()).append(" has ").append(city.getCount()).append(" associated customer appointments\n");
-        }
+        });
         this.content = builder.toString();
         return this.content;
     }

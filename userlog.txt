@@ -1,0 +1,8 @@
+Login attempt at 2020-06-16 14:41:56 with username  : FAILED
+Login attempt at 2020-06-16 14:42:00 with username test : SUCCESS
+Login attempt at 2020-06-16 14:43:42 with username test : FAILED
+Login attempt at 2020-06-16 14:44:00 with username test : FAILED
+Login attempt at 2020-06-16 14:44:46 with username  : FAILED
+Login attempt at 2020-06-16 14:44:49 with username dsadas : FAILED
+Login attempt at 2020-06-16 14:44:54 with username dsadas : FAILED
+Login attempt at 2020-06-16 14:45:02 with username test : SUCCESS

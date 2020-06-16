@@ -22,11 +22,6 @@ public class Appointment implements Comparable<Appointment>{
     private final String location; //Optional
     private final String contact; //Optional
 
-    @Override
-    public int compareTo(Appointment appointment) {
-        return getStart().toLocalDateTime().compareTo(appointment.getStart().toLocalDateTime());
-    }
-    
     // Builder pattern handles optional parameters
     public static class AppointmentBuilder {
         
@@ -148,6 +143,11 @@ public class Appointment implements Comparable<Appointment>{
         String time = String.valueOf(this.end.toLocalTime());
         String dateTime = date + " " + time;
         return dateTime;
+    }
+    // Appointments compared by start time for sorting by appointment time    
+    @Override
+    public int compareTo(Appointment appointment) {
+        return getStart().toLocalDateTime().compareTo(appointment.getStart().toLocalDateTime());
     }
         
 }

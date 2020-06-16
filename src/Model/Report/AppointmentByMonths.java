@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -84,8 +85,8 @@ public class AppointmentByMonths extends Report implements Reportable{
         }
     }
 
-    
-    private ArrayList setContent() {
+    @Override
+    public ArrayList setContent() {
         ArrayList<AppointmentMonth> appointmentMonthList = new ArrayList<>();
         // if AppointmentMonth with same type and month exists, inrement by one, else create new AppointmentMonth
         for (Appointment appointment : AppointmentList.allAppointments) {
@@ -115,7 +116,7 @@ public class AppointmentByMonths extends Report implements Reportable{
     // Creates formatted string of report data
     @Override
     public String collectAndDisplay() {
-        ArrayList<AppointmentMonth> data = setContent();
+        Collection<AppointmentMonth> data = setContent();
         StringBuilder builder = new StringBuilder();
         builder.append(this.reportTitle).append("\n\n");
         

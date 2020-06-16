@@ -4,6 +4,7 @@ package Controller;
 import DAO.UserDAO;
 import Model.User;
 import Model.UserList;
+import Utilities.Logger;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -58,21 +59,21 @@ public class LoginScreenController implements Initializable {
         String loginPassword = getPassword();
         User currentUser = getUser();
         
-        if (currentUser == null) {
-            loginInstructionLbl.setText(rb.getString("loginError"));
-            return;
-        } 
-        
         try {
             if (loginUserName.equals(currentUser.getUserName()) && loginPassword.equals(currentUser.getPassword())) {
                 User.currentUser = currentUser;
+                Logger.logUserLogin(loginUserName, true);
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();                
                 scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
-            } 
+            } else {
+                loginInstructionLbl.setText(rb.getString("loginError"));
+                Logger.logUserLogin(loginUserName, false);
+            }
         } catch (NullPointerException e) {
-            loginInstructionLbl.setText(rb.getString("loginError"));
+            loginInstructionLbl.setText(rb.getString("loginNull"));
+            Logger.logUserLogin(loginUserName, false);
         }
         
 
@@ -102,11 +103,7 @@ public class LoginScreenController implements Initializable {
 
     }
     
-    private void userLoginWrite() {
-        
-        
-        // close writer when finished
-    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

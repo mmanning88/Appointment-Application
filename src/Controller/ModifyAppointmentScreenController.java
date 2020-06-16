@@ -260,6 +260,9 @@ public class ModifyAppointmentScreenController implements Initializable {
         appointmentIdTxt.setEditable(false);
         customerNameTxt.setEditable(false);
         
+        /* All TableViews populated using lambda expressions. 
+        *  This allows parallel execution of operations, tables populated with higher effieciency.
+        */
         customerTableView.setItems(CustomerList.customerList);
             
         customerIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCustomerId()).asObject());

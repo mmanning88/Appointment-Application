@@ -11,6 +11,7 @@ import Model.User;
 import Utilities.DateTimeFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -76,6 +77,7 @@ public class ConsultantSchedule extends Report implements Reportable{
         
     }
 
+    @Override
     public ArrayList setContent() {
         ArrayList<UserReport> userReportsList = new ArrayList<>();
         for (Appointment appointment : AppointmentList.allAppointments) {
@@ -99,10 +101,9 @@ public class ConsultantSchedule extends Report implements Reportable{
     }
     
     private boolean checkUserReports(ArrayList<UserReport> reportList, User user) {
-        for (UserReport userReport : reportList) {
-            if (userReport.getUser().equals(user)) {
-                return true;
-            }
+        // Lambda expression for reportList uses internal iteration instead of external
+        if (reportList.stream().anyMatch((userReport) -> (userReport.getUser().equals(user)))) {
+            return true;
         }
         return false;
     }
@@ -111,7 +112,7 @@ public class ConsultantSchedule extends Report implements Reportable{
     // Creates formatted string of report data
     @Override
     public String collectAndDisplay() {
-        ArrayList<UserReport> data = setContent();
+        Collection<UserReport> data = setContent();
         StringBuilder builder = new StringBuilder();
         String titleString = this.reportTitle;        
         builder.append(titleString).append("\n\n");
