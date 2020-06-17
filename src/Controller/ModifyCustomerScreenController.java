@@ -19,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
@@ -99,6 +100,40 @@ public class ModifyCustomerScreenController implements Initializable {
             needCity = true;
         } else {
             needCity = false;
+        }
+        
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (customerName.isEmpty()) {
+
+            alert.setTitle("Customer Name Error");
+            alert.setContentText("Customer must have a name");
+            alert.showAndWait();
+            return;
+        } else if (address1.isEmpty()) {
+            alert.setTitle("Customer Address Error");
+            alert.setContentText("Address field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (city.isEmpty()) {
+            alert.setTitle("Customer City Error");
+            alert.setContentText("City field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (postalCode.isEmpty()) {
+            alert.setTitle("Customer Postal Code Error");
+            alert.setContentText("Postal Code field must be filled out");
+            alert.showAndWait();
+            return;
+        } else if (phone.isEmpty()) {
+            alert.setTitle("Customer Phone Error");
+            alert.setContentText("Phone field must be filled out");
+            alert.showAndWait();
+            return;
+        }  else if (country.isEmpty()) {
+            alert.setTitle("Customer Country Error");
+            alert.setContentText("Country must be selected");
+            alert.showAndWait();
+            return;
         }
 
         Address address = new Address(transferredAddressId, cityId, countryId, address1, address2, postalCode, phone, city, country);
